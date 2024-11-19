@@ -1,5 +1,6 @@
 package com.cesarfraaga.productmanagement.service;
 
+import com.cesarfraaga.productmanagement.dto.ProductDTO;
 import com.cesarfraaga.productmanagement.entity.Product;
 import com.cesarfraaga.productmanagement.repository.ProductRepository;
 import org.apache.velocity.exception.ResourceNotFoundException;
@@ -12,12 +13,15 @@ public class ProductService {
 
     private ProductRepository repository;
 
-    public Product save(Product product) {
+    public Product save(ProductDTO product) {
         if (product.getName() == null || product.getPrice() == null)
             System.out.println("Informações insuficientes.");
         if (product.getPrice() < 0)
             System.out.println("O valor do produto tem que ser maior que 0");
-        return repository.save(product);
+
+        // Criar um mapper para converter ProductDTO em Product e vice-versa
+        return null;
+        //return repository.save(product);
     }
 
     public Product update(Product product) {
