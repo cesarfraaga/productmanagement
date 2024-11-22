@@ -8,6 +8,7 @@ import org.apache.velocity.exception.ResourceNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Service
@@ -23,37 +24,42 @@ public class ProductService {
     }
 
     public ProductDTO save(ProductDTO dto) {
-
         Product product = productMapper.toEntity(dto);
         product = productRepository.save(product);
         return productMapper.toDTO(product);
-
-        /*if (product.getName() == null || product.getPrice() == null)
-            System.out.println("Informações insuficientes.");
-        if (product.getPrice() < 0)
-            System.out.println("O valor do produto tem que ser maior que 0");
-        return repository.save(product);*/
     }
 
-    public Product update(Product product) {
-        if (productRepository.existsById(product.getId())) {
-            return productRepository.save(product);
-        } else {
-            throw new ResourceNotFoundException("Não existe um produto com ID " + product.getId() + ".");
-        }
-    }
-
-    public void deleteById(Long id) {
-        productRepository.deleteById(id);
-    }
-
-    public ProductDTO findById(Long id) {
-        Product product = productRepository.findById(id).orElseThrow(() -> new RuntimeException("Product not Found"));
+    public ProductDTO update(ProductDTO dto) {
+        if (dto.getId() == null || !productRepository.existsById(dto.getId()))
+            throw new ResourceNotFoundException("Product not found with ID " + dto.getId() + ".");
+        Product product = productMapper.toEntity(dto);
+        product = productRepository.save(product);
         return productMapper.toDTO(product);
     }
 
-    public List<Product> findAll() {
-        return productRepository.findAll();
+    public ProductDTO findById(Long id) {
+        Product product = productRepository.findById(id).
+                orElseThrow(() -> new ResourceNotFoundException("Product not found with ID " + id + "."));
+        return productMapper.toDTO(product);
     }
 
+    public void deleteById(Long id) {
+        if (!productRepository.existsById(id)) {
+            throw new ResourceNotFoundException("Product not found with ID " + id + ".");
+        }
+        productRepository.deleteById(id);
+    }
+
+    public List<ProductDTO> findAll() {
+        List<Product> productList = productRepository.findAll();
+        List<ProductDTO> productDTOList = new ArrayList<>();
+
+        for (Product product : productList) {
+            ProductDTO dto = productMapper.toDTO(product);
+            productDTOList.add(dto);
+        }
+
+        return productDTOList;
+    }
+    // Próximo passo: Criar a própria classe de exceção; 
 }
