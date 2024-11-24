@@ -2,9 +2,9 @@ package com.cesarfraaga.productmanagement.service;
 
 import com.cesarfraaga.productmanagement.dto.ProductDTO;
 import com.cesarfraaga.productmanagement.entity.Product;
+import com.cesarfraaga.productmanagement.exception.ResourceNotFoundException;
 import com.cesarfraaga.productmanagement.repository.ProductRepository;
 import com.cesarfraaga.productmanagement.util.ProductMapper;
-import org.apache.velocity.exception.ResourceNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -58,7 +58,6 @@ public class ProductService {
             ProductDTO dto = productMapper.toDTO(product);
             productDTOList.add(dto);
         }
-
         return productDTOList;
     }
     // Próximo passo: Criar a própria classe de exceção;
