@@ -14,16 +14,16 @@ public class Product {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "product_id")
+    @Column(name = "id")
     private Long id;
 
-    @Column(name = "product_name", nullable = false, length = 100)
+    @Column(name = "name", nullable = false, length = 100)
     private String name;
 
-    @Column(name = "product_price", precision = 10, scale = 2)
+    @Column(name = "price", precision = 10, scale = 2)
     private BigDecimal price;
 
-    @Column(name = "product_description")
+    @Column(name = "description")
     private String description;
 
 }
