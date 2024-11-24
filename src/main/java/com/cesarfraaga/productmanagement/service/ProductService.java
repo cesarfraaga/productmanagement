@@ -24,6 +24,11 @@ public class ProductService {
     }
 
     public ProductDTO save(ProductDTO dto) {
+
+        if (dto.getName() == null || dto.getName().isEmpty()) {
+            throw new IllegalArgumentException("Name cannot be null or empty");
+        }
+
         Product product = productMapper.toEntity(dto);
         product = productRepository.save(product);
         return productMapper.toDTO(product);
@@ -60,5 +65,5 @@ public class ProductService {
         }
         return productDTOList;
     }
-    // Próximo passo: Criar a própria classe de exceção;
+
 }
