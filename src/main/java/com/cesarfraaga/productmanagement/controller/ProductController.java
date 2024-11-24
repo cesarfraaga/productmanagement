@@ -7,6 +7,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 @RestController
 @RequestMapping(value = "/product")
 public class ProductController {
@@ -26,4 +28,21 @@ public class ProductController {
         return ResponseEntity.ok(productDTO);
     }
 
+    @GetMapping("/findAll")
+    public ResponseEntity<List<ProductDTO>> findAll() {
+        List<ProductDTO> productDTOList = service.findAll();
+        return ResponseEntity.ok(productDTOList);
+    }
+
+    @PutMapping("/update")
+    public ResponseEntity<ProductDTO> updateProduct(@RequestBody ProductDTO productDTO) {
+        ProductDTO updatedProduct = service.update(productDTO);
+        return ResponseEntity.ok(updatedProduct);
+    }
+
+    @DeleteMapping("/delete/{id}")
+    public ResponseEntity<Void> deleteProduct(@PathVariable Long id) {
+        service.deleteById(id);
+        return ResponseEntity.noContent().build();
+    }
 }
