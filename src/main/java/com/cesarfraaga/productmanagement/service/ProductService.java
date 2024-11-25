@@ -5,27 +5,23 @@ import com.cesarfraaga.productmanagement.entity.Product;
 import com.cesarfraaga.productmanagement.exception.ResourceNotFoundException;
 import com.cesarfraaga.productmanagement.repository.ProductRepository;
 import com.cesarfraaga.productmanagement.util.ProductMapper;
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
 
+@RequiredArgsConstructor
 @Service
 public class ProductService {
 
-    private ProductRepository productRepository;
-    private ProductMapper productMapper;
-
-    @Autowired
-    public ProductService(ProductRepository productRepository, ProductMapper productMapper) {
-        this.productRepository = productRepository;
-        this.productMapper = productMapper;
-    }
+    private final ProductRepository productRepository;
+    private final ProductMapper productMapper;
 
     public ProductDTO save(ProductDTO dto) {
 
-        if (dto.getName() == null || dto.getName().isEmpty()) {
+        if (dto.getName().isBlank()) {
             throw new IllegalArgumentException("Name cannot be null or empty");
         }
 
