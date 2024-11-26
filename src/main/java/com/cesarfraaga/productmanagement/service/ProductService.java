@@ -6,9 +6,10 @@ import com.cesarfraaga.productmanagement.exception.ResourceNotFoundException;
 import com.cesarfraaga.productmanagement.repository.ProductRepository;
 import com.cesarfraaga.productmanagement.util.ProductMapper;
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.stereotype.Service;
 
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -21,13 +22,19 @@ public class ProductService {
 
     public ProductDTO save(ProductDTO dto) {
 
-        if (dto.getName().isBlank()) {
-            throw new IllegalArgumentException("Name cannot be null or empty");
+        if (dto.getName().isBlank())
+            throw new IllegalArgumentException("Name cannot be null or empty.");
+        if (dto.getDescription().isBlank())
+            throw new IllegalArgumentException("Description cannot be null or empty.");
+        if (dto.getPrice().compareTo(BigDecimal.ZERO) <= 0)
+            throw new IllegalArgumentException("Price must be greater than zero.");
+        try {
+            Product product = productMapper.toEntity(dto);
+            product = productRepository.save(product);
+            return productMapper.toDTO(product);
+        } catch (DataIntegrityViolationException ex) {
+            throw new IllegalArgumentException("A product with this name already exists.");
         }
-
-        Product product = productMapper.toEntity(dto);
-        product = productRepository.save(product);
-        return productMapper.toDTO(product);
     }
 
     public ProductDTO update(ProductDTO dto) {
