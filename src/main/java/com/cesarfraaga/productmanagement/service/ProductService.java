@@ -52,15 +52,16 @@ public class ProductService {
     }
 
     public void deleteById(Long id) {
-        if (!productRepository.existsById(id)) {
+        if (!productRepository.existsById(id))
             throw new ResourceNotFoundException("Product not found with ID " + id + ".");
-        }
         productRepository.deleteById(id);
     }
 
     public List<ProductDTO> findAll() {
         List<Product> productList = productRepository.findAll();
         List<ProductDTO> productDTOList = new ArrayList<>();
+        if (productList.isEmpty())
+            throw new ResourceNotFoundException("No products available.");
 
         for (Product product : productList) {
             ProductDTO dto = productMapper.toDTO(product);
