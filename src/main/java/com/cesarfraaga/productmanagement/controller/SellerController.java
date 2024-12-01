@@ -22,7 +22,7 @@ public class SellerController {
         return ResponseEntity.status(HttpStatus.CREATED).body(savedSeller);
     }
 
-    @GetMapping(value = "{/id}")
+    @GetMapping(value = "/{id}")
     public ResponseEntity<SellerDTO> findById(@PathVariable Long id) {
         SellerDTO sellerDTO = service.findById(id);
         if (sellerDTO == null)

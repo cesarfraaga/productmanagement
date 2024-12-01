@@ -22,7 +22,7 @@ public class ClientController {
         return ResponseEntity.status(HttpStatus.CREATED).body(savedClient);
     }
 
-    @GetMapping(value = "{/id}")
+    @GetMapping(value = "/{id}")
     public ResponseEntity<ClientDTO> findById(@PathVariable Long id) {
         ClientDTO clientDTO = service.findById(id);
         if (clientDTO == null)

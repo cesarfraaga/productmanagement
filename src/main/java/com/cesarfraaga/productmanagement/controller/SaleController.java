@@ -22,7 +22,7 @@ public class SaleController {
         return ResponseEntity.status(HttpStatus.CREATED).body(savedSale);
     }
 
-    @GetMapping(value = "{/id}")
+    @GetMapping(value = "/{id}")
     public ResponseEntity<SaleDTO> findById(@PathVariable Long id) {
         SaleDTO saleDTO = service.findById(id);
         if (saleDTO == null)
