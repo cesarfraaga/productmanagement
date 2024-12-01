@@ -8,16 +8,16 @@ public class Client {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "client_id")
+    @Column(name = "id")
     private Long id;
 
-    @Column(name = "client_name")
+    @Column(name = "name")
     private String name;
 
-    @Column(name = "client_cpf")
+    @Column(name = "cpf")
     private String CPF;
 
-    @Column(name = "client_birthday")
+    @Column(name = "birthday")
     private String birthDay;
 
 }

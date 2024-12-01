@@ -20,16 +20,16 @@ public class Sale {
     @Column(name = "id")
     private Long id;
 
+    @Column(name = "client_id")
     private Long clientId;
 
+    @Column(name = "seller_id")
     private Long sellerId;
 
+    @Column(name = "shopping_cart_id")
     private Long shoppingCartId;
 
-    private List<Long> productsIds;
-
+    @Column(name = "sales_date")
     private LocalDateTime salesDate;
-
-
 
 }
