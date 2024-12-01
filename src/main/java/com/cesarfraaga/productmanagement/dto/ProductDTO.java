@@ -1,12 +1,10 @@
 package com.cesarfraaga.productmanagement.dto;
 
-import lombok.Getter;
-import lombok.Setter;
+import lombok.Data;
 
 import java.math.BigDecimal;
 
-@Setter
-@Getter
+@Data
 public class ProductDTO {
     private Long id;
     private String name;
