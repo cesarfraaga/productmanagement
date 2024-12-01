@@ -12,7 +12,6 @@ public class SaleDTO {
     private Long clientId;
     private Long sellerId;
     private Long shoppingCartId;
-    private List<Long> productsIds;
     private LocalDateTime salesDate;
 
 }
