@@ -1,11 +1,17 @@
 package com.cesarfraaga.productmanagement.entity;
 
 import jakarta.persistence.*;
+import lombok.Data;
+import lombok.Getter;
+import lombok.Setter;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
+@Getter
+@Setter
+@Entity
 @Table(name = "sale")
 public class Sale {
 
@@ -14,13 +20,13 @@ public class Sale {
     @Column(name = "id")
     private Long id;
 
-    private Client client;
+    private Long clientId;
 
-    private Seller seller;
+    private Long sellerId;
 
-    private ShoppingCart shoppingCart;
+    private Long shoppingCartId;
 
-    private List<Product> products = new ArrayList<>();
+    private List<Long> productsIds;
 
     private LocalDateTime salesDate;
 
