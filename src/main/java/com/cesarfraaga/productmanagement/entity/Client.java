@@ -1,8 +1,12 @@
 package com.cesarfraaga.productmanagement.entity;
 
 import jakarta.persistence.*;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
 
+@AllArgsConstructor
 @Entity
+@Getter
 @Table(name = "client")
 public class Client {
 
