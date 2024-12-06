@@ -10,6 +10,9 @@ import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
+
+import static java.util.Objects.isNull;
 
 @RequiredArgsConstructor
 @Service
@@ -21,6 +24,11 @@ public class ClientService {
     public ClientDTO save(ClientDTO clientDTO) {
         Client client = clientMapper.clientToEntity(clientDTO);
         client = repository.save(client);
+
+        if (clientDTO.getName() == null || clientDTO.getName().isBlank() ) {
+            throw new ResourceNotFoundException("Name cannot be null or empty.");
+        }
+
         return clientMapper.clientToDTO(client);
     }
 
@@ -32,7 +40,7 @@ public class ClientService {
 
     public ClientDTO findById(Long id) {
         Client client = repository.findById(id)
-                .orElseThrow(() -> new ResourceNotFoundException("Client not found with id" + id + "."));
+                .orElseThrow(() -> new ResourceNotFoundException("Client not found with id " + id + "."));
         return clientMapper.clientToDTO(client);
     }
 
