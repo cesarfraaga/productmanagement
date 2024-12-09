@@ -40,7 +40,7 @@ public class ClientServiceTest {
 
         ClientDTO response = clientService.save(clientDTO);
 
-        assertEquals(clientDTO.getId(), response.getId());  //garanta que o valor <response.getId()> é igual ao valor esperado <clientDTO.getId()>
+        assertEquals(clientDTO.getId(), response.getId());  //garante que o valor <response.getId()> é igual ao valor esperado <clientDTO.getId()>
         assert response.getName().equals(clientDTO.getName());
         assert response.getCPF().equals(clientDTO.getCPF());
         assert response.getBirthDay().equals(clientDTO.getBirthDay());
@@ -67,7 +67,7 @@ public class ClientServiceTest {
         when(clientRepository.save(any())).thenReturn(client);
         when(clientMapper.clientToEntity(any(ClientDTO.class))).thenReturn(client);
 
-        assertThrows(ResourceNotFoundException.class, () -> clientService.save(clientDTO)); //assegure que a chamada do método <clientService.save()> com <esse parametro> <lanca uma ResourceNotFoundException>
-        verify(clientMapper, never()).clientToDTO(any());   //verifique que o <mapper> <nunca> <chama esse método>
+        assertThrows(ResourceNotFoundException.class, () -> clientService.save(clientDTO)); //assegura que a chamada do método <clientService.save()> com <esse parametro> <lanca uma ResourceNotFoundException>
+        verify(clientMapper, never()).clientToDTO(any());   //verifica que o <mapper> <nunca> <chama esse método>
     }
 }
