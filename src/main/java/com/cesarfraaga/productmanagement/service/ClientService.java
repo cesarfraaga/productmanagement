@@ -10,9 +10,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Objects;
 
-import static java.util.Objects.isNull;
 
 @RequiredArgsConstructor
 @Service
@@ -25,9 +23,15 @@ public class ClientService {
         Client client = clientMapper.clientToEntity(clientDTO);
         client = repository.save(client);
 
-        if (clientDTO.getName() == null || clientDTO.getName().isBlank() ) {
+        if (clientDTO.getName() == null || clientDTO.getName().isBlank())
             throw new ResourceNotFoundException("Name cannot be null or empty.");
-        }
+        if (clientDTO.getName().length() > 50)
+            throw new IllegalArgumentException("Name < 50");
+
+        if (clientDTO.getCPF() == null || clientDTO.getCPF().isBlank())
+            throw new ResourceNotFoundException("CPF cannot be null or empty.");
+        if (clientDTO.getBirthDay() == null || clientDTO.getBirthDay().isBlank())
+            throw new ResourceNotFoundException("Birth day cannot be null or empty.");
 
         return clientMapper.clientToDTO(client);
     }
