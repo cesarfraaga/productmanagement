@@ -21,8 +21,6 @@ public class SaleService {
     public SaleDTO save(SaleDTO saleDTO) {
         if (saleDTO.getClientId() == null)
             throw new IllegalArgumentException("Client ID cannot be null or empty.");
-        if (saleDTO.getSellerId() == null)
-            throw new IllegalArgumentException("Seller ID cannot be null or empty.");
         if (saleDTO.getShoppingCartId() == null)
             throw new IllegalArgumentException("Shopping Cart ID cannot be null or empty.");
 
@@ -36,8 +34,6 @@ public class SaleService {
             throw new ResourceNotFoundException("Sale not found with ID " + saleDTO.getId() + ".");
         if (saleDTO.getClientId() == null)
             throw new IllegalArgumentException("Client ID cannot be null or empty.");
-        if (saleDTO.getSellerId() == null)
-            throw new IllegalArgumentException("Seller ID cannot be null or empty.");
         if (saleDTO.getShoppingCartId() == null)
             throw new IllegalArgumentException("Shopping Cart ID cannot be null or empty.");
 
