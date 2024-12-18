@@ -19,12 +19,28 @@ public class SaleService {
     private final SaleMapper saleMapper;
 
     public SaleDTO save(SaleDTO saleDTO) {
+        if (saleDTO.getClientId() == null)
+            throw new IllegalArgumentException("Client ID cannot be null or empty.");
+        if (saleDTO.getSellerId() == null)
+            throw new IllegalArgumentException("Seller ID cannot be null or empty.");
+        if (saleDTO.getShoppingCartId() == null)
+            throw new IllegalArgumentException("Shopping Cart ID cannot be null or empty.");
+
         Sale sale = saleMapper.toEntitySale(saleDTO);
         sale = saleRepository.save(sale);
         return saleMapper.toDTOSale(sale);
     }
 
     public SaleDTO update(SaleDTO saleDTO) {
+        if (saleDTO.getId() == null || !saleRepository.existsById(saleDTO.getId()))
+            throw new ResourceNotFoundException("Sale not found with ID " + saleDTO.getId() + ".");
+        if (saleDTO.getClientId() == null)
+            throw new IllegalArgumentException("Client ID cannot be null or empty.");
+        if (saleDTO.getSellerId() == null)
+            throw new IllegalArgumentException("Seller ID cannot be null or empty.");
+        if (saleDTO.getShoppingCartId() == null)
+            throw new IllegalArgumentException("Shopping Cart ID cannot be null or empty.");
+
         Sale sale = saleMapper.toEntitySale(saleDTO);
         sale = saleRepository.save(sale);
         return saleMapper.toDTOSale(sale);
