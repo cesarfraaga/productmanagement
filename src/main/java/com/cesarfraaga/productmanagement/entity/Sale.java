@@ -23,9 +23,6 @@ public class Sale {
     @Column(name = "client_id")
     private Long clientId;
 
-    @Column(name = "seller_id")
-    private Long sellerId;
-
     @Column(name = "shopping_cart_id")
     private Long shoppingCartId;
 

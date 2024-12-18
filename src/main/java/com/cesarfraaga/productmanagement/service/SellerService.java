@@ -1,10 +1,6 @@
 package com.cesarfraaga.productmanagement.service;
 
-import com.cesarfraaga.productmanagement.dto.SellerDTO;
-import com.cesarfraaga.productmanagement.entity.Seller;
 import com.cesarfraaga.productmanagement.exception.ResourceNotFoundException;
-import com.cesarfraaga.productmanagement.repository.SellerRepository;
-import com.cesarfraaga.productmanagement.util.SellerMapper;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
