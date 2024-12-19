@@ -16,5 +16,4 @@ public class ShoppingCart {
 
     private List<Long> productsIds;
 
-
 }
