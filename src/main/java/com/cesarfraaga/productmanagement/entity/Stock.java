@@ -12,9 +12,9 @@ public class Stock {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id")
     private Long id;
-    private Product product;
 
+    private Long productId;
 
-    // Preciso indicar a qyabtudade por produto
+    // Preciso indicar a quantidade por produto
 
 }
