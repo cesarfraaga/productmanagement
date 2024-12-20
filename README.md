@@ -14,13 +14,13 @@ Durante o desenvolvimento, estou enfrentando desafios interessantes e me esforce
 
 ## 🚀 Funcionalidades
 
- - 📦 Gerenciamento de Produtos
+  - 📦 Gerenciamento de Produtos
 
  - Cadastro, atualização, exclusão e listagem de produtos.
  - Validação de dados dos produtos, como nome único e preço não negativo.
 
 
- - 🛍️ Processamento de Vendas
+  - 🛍️ Processamento de Vendas
 
  - Realização de vendas com múltiplas validações, incluindo:
  - Verificação da existência de cliente.
