@@ -3,7 +3,9 @@ package com.cesarfraaga.productmanagement.service;
 import com.cesarfraaga.productmanagement.dto.SaleDTO;
 import com.cesarfraaga.productmanagement.entity.Sale;
 import com.cesarfraaga.productmanagement.exception.ResourceNotFoundException;
+import com.cesarfraaga.productmanagement.repository.ClientRepository;
 import com.cesarfraaga.productmanagement.repository.SaleRepository;
+import com.cesarfraaga.productmanagement.repository.ShoppingCartRepository;
 import com.cesarfraaga.productmanagement.util.SaleMapper;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -18,11 +20,22 @@ public class SaleService {
     private final SaleRepository saleRepository;
     private final SaleMapper saleMapper;
 
+    private final ClientRepository clientRepository;
+    private final ShoppingCartRepository shoppingCartRepository;
+
+    private final StockService stockService;
+    // Encapsular as validações específicas em um método privado
     public SaleDTO save(SaleDTO saleDTO) {
         if (saleDTO.getClientId() == null)
             throw new IllegalArgumentException("Client ID cannot be null or empty.");
         if (saleDTO.getShoppingCartId() == null)
             throw new IllegalArgumentException("Shopping Cart ID cannot be null or empty.");
+
+        clientRepository.findById(saleDTO.getClientId())
+                .orElseThrow(() -> new ResourceNotFoundException("Client not found"));
+
+        shoppingCartRepository.findById(saleDTO.getShoppingCartId())
+                .orElseThrow(() -> new ResourceNotFoundException("Shopping Cart not found"));
 
         Sale sale = saleMapper.toEntitySale(saleDTO);
         sale = saleRepository.save(sale);
