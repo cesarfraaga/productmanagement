@@ -23,19 +23,20 @@ public class SaleService {
     private final ClientRepository clientRepository;
     private final ShoppingCartRepository shoppingCartRepository;
 
-    private final StockService stockService;
     // Encapsular as validações específicas em um método privado
-    public SaleDTO save(SaleDTO saleDTO) {
+    public SaleDTO createSale(SaleDTO saleDTO) {
         if (saleDTO.getClientId() == null)
             throw new IllegalArgumentException("Client ID cannot be null or empty.");
         if (saleDTO.getShoppingCartId() == null)
             throw new IllegalArgumentException("Shopping Cart ID cannot be null or empty.");
 
         clientRepository.findById(saleDTO.getClientId())
-                .orElseThrow(() -> new ResourceNotFoundException("Client not found"));
+                .orElseThrow(() -> new ResourceNotFoundException("Client not found with id " + saleDTO.getClientId() +"."));
 
         shoppingCartRepository.findById(saleDTO.getShoppingCartId())
                 .orElseThrow(() -> new ResourceNotFoundException("Shopping Cart not found"));
+
+        // Eu recebo um ShoppingCartId e ele precisa estar ligado ao ClientId e precisa ter os produtos nele;
 
         Sale sale = saleMapper.toEntitySale(saleDTO);
         sale = saleRepository.save(sale);
