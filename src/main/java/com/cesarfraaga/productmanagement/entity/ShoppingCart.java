@@ -1,18 +1,24 @@
 package com.cesarfraaga.productmanagement.entity;
 
 import jakarta.persistence.*;
+import lombok.Getter;
 
 import java.util.List;
 
 @Entity
-@Table(name = "shopping_cart")
+@Getter
 public class ShoppingCart {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "id")
     private Long id;
 
-    private List<Long> productsIds;
+    @ManyToMany
+    @JoinTable(
+            name = "shopping_cart_product",
+            joinColumns = @JoinColumn(name = "shopping_cart_id"),
+            inverseJoinColumns = @JoinColumn(name = "product_id")
+    )
+    private List<Product> products;
 
 }
