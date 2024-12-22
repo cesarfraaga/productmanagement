@@ -26,4 +26,8 @@ public class Product {
     @Column(name = "description")
     private String description;
 
+    @Column(name = "quantity")
+    private Integer quantity;
+
 }
+

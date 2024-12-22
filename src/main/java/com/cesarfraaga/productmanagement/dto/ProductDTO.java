@@ -1,5 +1,6 @@
 package com.cesarfraaga.productmanagement.dto;
 
+import jakarta.persistence.Column;
 import lombok.Data;
 
 import java.math.BigDecimal;
@@ -10,4 +11,5 @@ public class ProductDTO {
     private String name;
     private BigDecimal price;
     private String description;
+    private Integer quantity;
 }
