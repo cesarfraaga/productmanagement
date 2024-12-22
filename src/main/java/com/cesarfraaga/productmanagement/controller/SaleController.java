@@ -18,7 +18,7 @@ public class SaleController {
 
     @PostMapping(value = "/save")
     public ResponseEntity<SaleDTO> saveSale(@RequestBody SaleDTO saleDTO) {
-        SaleDTO savedSale = service.save(saleDTO);
+        SaleDTO savedSale = service.createSale(saleDTO);
         return ResponseEntity.status(HttpStatus.CREATED).body(savedSale);
     }
 
