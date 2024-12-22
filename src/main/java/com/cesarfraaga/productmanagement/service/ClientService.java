@@ -69,7 +69,7 @@ public class ClientService {
 
     public void deleteById(Long id) {
         if (!repository.existsById(id))
-            throw new ResourceNotFoundException("Client not found for delete.");
+            throw new ResourceNotFoundException("Client not found.");
         repository.deleteById(id);
     }
 
