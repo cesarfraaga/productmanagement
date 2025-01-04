@@ -11,6 +11,8 @@ import org.springframework.stereotype.Service;
 import java.util.ArrayList;
 import java.util.List;
 
+import static com.cesarfraaga.productmanagement.util.ExceptionConstants.*;
+
 
 @RequiredArgsConstructor
 @Service
@@ -19,18 +21,19 @@ public class ClientService {
     private final ClientRepository repository;
     private final ClientMapper clientMapper;
 
+    private final int MAX_LENGTH_CLIENT_NAME = 50;
+    private final int MIN_LENGTH_CLIENT_NAME = 2;
+
     public ClientDTO save(ClientDTO clientDTO) {
         if (clientDTO.getName() == null || clientDTO.getName().isBlank())
-            throw new ResourceNotFoundException("Name cannot be null or empty.");
-        if (clientDTO.getName().length() > 50)
-            throw new IllegalArgumentException("Name cannot be longer than 50 characters");
-        if (clientDTO.getName().length() < 2)
-            throw new IllegalArgumentException("Name cannot be shorter than 2 characters");
+            throw new ResourceNotFoundException(CLIENT_NAME_NULL_OR_EMPTY_MESSAGE);
+        if (clientDTO.getName().length() < MIN_LENGTH_CLIENT_NAME || clientDTO.getName().length() > MAX_LENGTH_CLIENT_NAME)
+            throw new IllegalArgumentException(CLIENT_NAME_LENGTH_MESSAGE);
 
         if (clientDTO.getCPF() == null || clientDTO.getCPF().isBlank())
-            throw new ResourceNotFoundException("CPF cannot be null or empty.");
+            throw new ResourceNotFoundException(CLIENT_CPF_NULL_OR_EMPTY_MESSAGE);
         if (clientDTO.getBirthDay() == null || clientDTO.getBirthDay().isBlank())
-            throw new ResourceNotFoundException("Birth day cannot be null or empty.");
+            throw new ResourceNotFoundException(CLIENT_BIRTHDAY_NULL_OR_EMPTY_MESSAGE);
 
         Client client = clientMapper.clientToEntity(clientDTO);
         client = repository.save(client);
@@ -39,18 +42,16 @@ public class ClientService {
 
     public ClientDTO update(ClientDTO clientDTO) {
         if (clientDTO.getId() == null || !repository.existsById(clientDTO.getId()))
-            throw new ResourceNotFoundException("Client not found with ID " + clientDTO.getId() + ".");
+            throw new ResourceNotFoundException(CLIENT_ID_NOT_FOUND_MESSAGE + clientDTO.getId() + PERIOD);
         if (clientDTO.getName() == null || clientDTO.getName().isBlank())
-            throw new ResourceNotFoundException("Name cannot be null or empty.");
-        if (clientDTO.getName().length() > 50)
-            throw new IllegalArgumentException("Name cannot be longer than 50 characters");
-        if (clientDTO.getName().length() < 2)
-            throw new IllegalArgumentException("Name cannot be shorter than 2 characters");
+            throw new ResourceNotFoundException(CLIENT_NAME_NULL_OR_EMPTY_MESSAGE);
+        if (clientDTO.getName().length() < MIN_LENGTH_CLIENT_NAME || clientDTO.getName().length() > MAX_LENGTH_CLIENT_NAME)
+            throw new IllegalArgumentException(CLIENT_NAME_LENGTH_MESSAGE);
 
         if (clientDTO.getCPF() == null || clientDTO.getCPF().isBlank())
-            throw new ResourceNotFoundException("CPF cannot be null or empty.");
+            throw new ResourceNotFoundException(CLIENT_CPF_NULL_OR_EMPTY_MESSAGE);
         if (clientDTO.getBirthDay() == null || clientDTO.getBirthDay().isBlank())
-            throw new ResourceNotFoundException("Birth day cannot be null or empty.");
+            throw new ResourceNotFoundException(CLIENT_BIRTHDAY_NULL_OR_EMPTY_MESSAGE);
 
         Client client = clientMapper.clientToEntity(clientDTO);
         client = repository.save(client);
@@ -59,17 +60,17 @@ public class ClientService {
 
     public ClientDTO findById(Long id) {
         if (id == null) {
-            throw new IllegalArgumentException("Id cannot be null.");
+            throw new IllegalArgumentException(CLIENT_ID_NULL_MESSAGE);
         }
 
         Client client = repository.findById(id)
-                .orElseThrow(() -> new ResourceNotFoundException("Client not found with id " + id + "."));
+                .orElseThrow(() -> new ResourceNotFoundException(CLIENT_ID_NOT_FOUND_MESSAGE + id + PERIOD));
         return clientMapper.clientToDTO(client);
     }
 
     public void deleteById(Long id) {
         if (!repository.existsById(id))
-            throw new ResourceNotFoundException("Client not found.");
+            throw new ResourceNotFoundException(CLIENT_NOT_FOUND_MESSAGE);
         repository.deleteById(id);
     }
 
@@ -78,7 +79,7 @@ public class ClientService {
         List<ClientDTO> clientDTOList = new ArrayList<>();
 
         if (clientList.isEmpty())
-            throw new ResourceNotFoundException("No clients available.");
+            throw new ResourceNotFoundException(CLIENTS_NOT_FOUND_MESSAGE);
 
         for (Client client : clientList) {
             ClientDTO clientDTO = clientMapper.clientToDTO(client);
