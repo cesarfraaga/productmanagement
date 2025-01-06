@@ -14,6 +14,7 @@ import org.mockito.Mock;
 import org.mockito.Spy;
 import org.mockito.junit.jupiter.MockitoExtension;
 
+import static com.cesarfraaga.productmanagement.util.ClientUtil.*;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.ArgumentMatchers.any;
@@ -36,8 +37,8 @@ public class ClientServiceTest {
     class MethodSaveTests {
         @Test
         void shouldSaveClientSuccessfully() {
-            Client client = new Client(1L, "César", "12345", "20/01/2003");
-            ClientDTO clientDTO = new ClientDTO(1L, "César", "12345", "20/01/2003");
+            Client client = buildValidClient();
+            ClientDTO clientDTO = buildValidClientDTO();
 
             when(clientRepository.save(any())).thenReturn(client);
             when(clientMapper.clientToEntity(any(ClientDTO.class))).thenReturn(client);
@@ -54,7 +55,7 @@ public class ClientServiceTest {
 
         @Test
         void shouldThrowExceptionWhenClientNameIsNull() {
-            ClientDTO clientDTO = new ClientDTO(1L, null, "12345", "20/01/2003");
+            ClientDTO clientDTO = buildClientDTOWithNullName();
 
             assertThrows(ResourceNotFoundException.class, () -> clientService.save(clientDTO));
             verify(clientMapper, never()).clientToDTO(any());
@@ -63,7 +64,7 @@ public class ClientServiceTest {
         //Posso fazer um teste parametrizado mudando apenas o valor da variável name
         @Test
         void shouldThrowExceptionWhenClientNameIsBlank() {
-            ClientDTO clientDTO = new ClientDTO(1L, "", "12345", "20/01/2003");
+            ClientDTO clientDTO = buildClientDTOWithBlankName();
 
             assertThrows(ResourceNotFoundException.class, () -> clientService.save(clientDTO)); //assegura que a chamada do método <clientService.save()> com <esse parametro> <lanca uma ResourceNotFoundException>
             verify(clientMapper, never()).clientToDTO(any());   //verifica que o <mapper> <nunca> <chama esse método>
@@ -71,7 +72,7 @@ public class ClientServiceTest {
 
         @Test
         void shouldThrowExceptionWhenClientNameLengthIsLessThanTwo() {
-            ClientDTO clientDTO = new ClientDTO(1L, "A", "12345", "20/01/2003");
+            ClientDTO clientDTO = buildClientDTOWithNameLengthIsLessThanTwo();
 
             assertThrows(IllegalArgumentException.class, () -> clientService.save(clientDTO));
             verify(clientMapper, never()).clientToDTO(any());
@@ -79,9 +80,41 @@ public class ClientServiceTest {
 
         @Test
         void shouldThrowExceptionWhenClientNameIsLongerThanFifty() {
-            ClientDTO clientDTO = new ClientDTO(1L, "ABCDEFGHIJKLMNOPQRSTUVWXYZABCDEFGHIJKLMNOPQRSTUVWXY", "12345", "20/01/2003");
+            ClientDTO clientDTO = buildClientDTOWithNameLengthIsLongerThanFifty();
 
             assertThrows(IllegalArgumentException.class, () -> clientService.save(clientDTO));
+            verify(clientMapper, never()).clientToDTO(any());
+        }
+
+        @Test
+        void shouldThrowExceptionWhenClientCpfIsNull() {
+            ClientDTO clientDTO = buildClientDTOWithNullCpf();
+
+            assertThrows(ResourceNotFoundException.class, () -> clientService.save(clientDTO));
+            verify(clientMapper, never()).clientToDTO(any());
+        }
+
+        @Test
+        void shouldThrowExceptionWhenClientCpfIsEmpty() {
+            ClientDTO clientDTO = buildClientDTOWithEmptyCpf();
+
+            assertThrows(ResourceNotFoundException.class, () -> clientService.save(clientDTO));
+            verify(clientMapper, never()).clientToDTO(any());
+        }
+
+        @Test
+        void shouldThrowExceptionWhenClientBirthDayIsNull() {
+            ClientDTO clientDTO = buildClientDTOWithNullBirthDay();
+
+            assertThrows(ResourceNotFoundException.class, () -> clientService.save(clientDTO));
+            verify(clientMapper, never()).clientToDTO(any());
+        }
+
+        @Test
+        void shouldThrowExceptionWhenClientBirthDayIsEmpty() {
+            ClientDTO clientDTO = buildClientDTOWithEmptyBirthDay();
+
+            assertThrows(ResourceNotFoundException.class, () -> clientService.save(clientDTO));
             verify(clientMapper, never()).clientToDTO(any());
         }
     }
@@ -89,6 +122,22 @@ public class ClientServiceTest {
     @Nested
     @DisplayName("Update Tests")
     class MethodUpdateTests {
+        @Test
+        void shouldUpdateClientSuccessfully() { //Teste falhou, verificar o porque
+            Client client = buildValidClient();
+            ClientDTO clientDTO = buildValidClientDTO();
 
+            when(clientRepository.save(any())).thenReturn(client);
+            when(clientMapper.clientToEntity(any(ClientDTO.class))).thenReturn(client);
+            when(clientMapper.clientToDTO(any(Client.class))).thenReturn(clientDTO);
+
+            ClientDTO response = clientService.update(clientDTO);
+
+            assertEquals(clientDTO.getId(), response.getId());
+            assert response.getName().equals(clientDTO.getName());
+            assert response.getCPF().equals(clientDTO.getCPF());
+            assert response.getBirthDay().equals(clientDTO.getBirthDay());
+
+        }
     }
 }
