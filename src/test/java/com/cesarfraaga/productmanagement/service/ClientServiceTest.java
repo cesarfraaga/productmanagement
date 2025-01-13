@@ -14,9 +14,10 @@ import org.mockito.Mock;
 import org.mockito.Spy;
 import org.mockito.junit.jupiter.MockitoExtension;
 
+import java.util.Optional;
+
 import static com.cesarfraaga.productmanagement.util.ClientUtil.*;
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.*;
 
@@ -26,7 +27,7 @@ public class ClientServiceTest {
     @InjectMocks
     private ClientService clientService;
 
-    @Mock // Simulation
+    @Mock //Simulação
     private ClientRepository clientRepository;
 
     @Spy
@@ -127,6 +128,9 @@ public class ClientServiceTest {
             Client client = buildValidClient();
             ClientDTO clientDTO = buildValidClientDTO();
 
+            //Mockei a verificação da existência do cliente
+            when(clientRepository.existsById(clientDTO.getId())).thenReturn(true);
+
             when(clientRepository.save(any())).thenReturn(client);
             when(clientMapper.clientToEntity(any(ClientDTO.class))).thenReturn(client);
             when(clientMapper.clientToDTO(any(Client.class))).thenReturn(clientDTO);
@@ -137,7 +141,150 @@ public class ClientServiceTest {
             assert response.getName().equals(clientDTO.getName());
             assert response.getCPF().equals(clientDTO.getCPF());
             assert response.getBirthDay().equals(clientDTO.getBirthDay());
+        }
 
+        @Test
+        void shouldThrowExceptionWhenIdIsNull() {
+            ClientDTO clientDTO = buildClientDTOWithNullName();
+
+            assertThrows(ResourceNotFoundException.class, () -> clientService.update(clientDTO));
+        }
+
+        @Test
+        void shouldThrowExceptionWhenIdDoesNotExist() {
+            ClientDTO clientDTO = buildValidClientDTO();
+
+            //Mockei o comportamento do repositório para indicar que o ID não existe
+            when(clientRepository.existsById(clientDTO.getId())).thenReturn(false);
+
+            assertThrows(ResourceNotFoundException.class, () -> clientService.update(clientDTO));
+        }
+
+        @Test
+        void shouldThrowExceptionWhenClientNameIsNull() {
+            ClientDTO clientDTO = buildClientDTOWithNullName();
+
+            assertThrows(ResourceNotFoundException.class, () -> clientService.update(clientDTO));
+            verify(clientMapper, never()).clientToDTO(any());
+        }
+
+        @Test
+        void shouldThrowExceptionWhenClientNameIsBlank() {
+            ClientDTO clientDTO = buildClientDTOWithBlankName();
+
+            assertThrows(ResourceNotFoundException.class, () -> clientService.update(clientDTO)); //assegura que a chamada do método <clientService.save()> com <esse parametro> <lanca uma ResourceNotFoundException>
+            verify(clientMapper, never()).clientToDTO(any());   //verifica que o <mapper> <nunca> <chama esse método>
+        }
+
+        @Test
+        void shouldThrowExceptionWhenClientNameLengthIsLessThanTwo() {
+            ClientDTO clientDTO = buildClientDTOWithNameLengthIsLessThanTwo();
+
+            when(clientRepository.existsById(clientDTO.getId())).thenReturn(true);
+
+            assertThrows(IllegalArgumentException.class, () -> clientService.update(clientDTO));
+            verify(clientMapper, never()).clientToDTO(any());
+        }
+
+        @Test
+        void shouldThrowExceptionWhenClientNameIsLongerThanFifty() {
+            ClientDTO clientDTO = buildClientDTOWithNameLengthIsLongerThanFifty();
+
+            when(clientRepository.existsById(clientDTO.getId())).thenReturn(true);
+
+            assertThrows(IllegalArgumentException.class, () -> clientService.update(clientDTO));
+            verify(clientMapper, never()).clientToDTO(any());
+        }
+
+        @Test
+        void shouldThrowExceptionWhenClientCpfIsNull() {
+            ClientDTO clientDTO = buildClientDTOWithNullCpf();
+
+            assertThrows(ResourceNotFoundException.class, () -> clientService.update(clientDTO));
+            verify(clientMapper, never()).clientToDTO(any());
+        }
+
+        @Test
+        void shouldThrowExceptionWhenClientCpfIsEmpty() {
+            ClientDTO clientDTO = buildClientDTOWithEmptyCpf();
+
+            assertThrows(ResourceNotFoundException.class, () -> clientService.update(clientDTO));
+            verify(clientMapper, never()).clientToDTO(any());
+        }
+
+        @Test
+        void shouldThrowExceptionWhenClientBirthDayIsNull() {
+            ClientDTO clientDTO = buildClientDTOWithNullBirthDay();
+
+            assertThrows(ResourceNotFoundException.class, () -> clientService.update(clientDTO));
+            verify(clientMapper, never()).clientToDTO(any());
+        }
+
+        @Test
+        void shouldThrowExceptionWhenClientBirthDayIsEmpty() {
+            ClientDTO clientDTO = buildClientDTOWithEmptyBirthDay();
+
+            assertThrows(ResourceNotFoundException.class, () -> clientService.update(clientDTO));
+            verify(clientMapper, never()).clientToDTO(any());
         }
     }
+
+    @Nested
+    @DisplayName("FindById Tests")
+    class MethodFindByIdTests {
+        @Test
+        void shouldFindClientByIdSuccessfully() {
+            Client client = buildValidClient();
+
+            ClientDTO clientDTO = buildValidClientDTO();
+
+            //Mockei o repositório para simular que o cliente existe
+            when(clientRepository.findById(client.getId())).thenReturn(Optional.of(client));
+
+            //Mockei o mapper para converter a entidade no DTO
+            when(clientMapper.clientToDTO(client)).thenReturn(clientDTO);
+
+            ClientDTO response = clientService.findById(client.getId());
+
+            assertNotNull(response);
+            assertEquals(client.getId(), response.getId());
+            assertEquals(client.getName(), response.getName());
+            assertEquals(client.getCPF(), response.getCPF());
+            assertEquals(client.getBirthDay(), response.getBirthDay());
+
+            verify(clientRepository, times(1)).findById(client.getId());
+        }
+
+        @Test
+        void shouldThrowExceptionWhenClientIdIsNull() {
+            Long id = null;
+
+            assertThrows(IllegalArgumentException.class, () -> clientService.findById(id));
+        }
+
+        @Test
+        void shouldThrowExceptionWhenClientNotFound() {
+            Client client = buildValidClient();
+
+            //Mockei o repositório para retornar Optional.empty()
+            when(clientRepository.findById(client.getId())).thenReturn(Optional.empty()); //Simula que o cliente não existe
+
+            assertThrows(ResourceNotFoundException.class, () -> clientService.findById(client.getId()));
+
+            //Pra verificar se o método do repositório foi chamado
+            verify(clientRepository, times(1)).findById(client.getId());
+        }
+    }
+    @Nested
+    @DisplayName("DeleteById Tests")
+    class MethodDeleteByIdTests {
+
+    }
+
+    @Nested
+    @DisplayName("FindAll Tests")
+    class MethodFindAllTests {
+
+    }
+
 }
