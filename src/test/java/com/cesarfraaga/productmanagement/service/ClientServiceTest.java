@@ -124,7 +124,7 @@ public class ClientServiceTest {
     @DisplayName("Update Tests")
     class MethodUpdateTests {
         @Test
-        void shouldUpdateClientSuccessfully() { //Teste falhou, verificar o porque
+        void shouldUpdateClientSuccessfully() {
             Client client = buildValidClient();
             ClientDTO clientDTO = buildValidClientDTO();
 
@@ -275,10 +275,43 @@ public class ClientServiceTest {
             verify(clientRepository, times(1)).findById(client.getId());
         }
     }
+
     @Nested
     @DisplayName("DeleteById Tests")
     class MethodDeleteByIdTests {
 
+        @Test
+        void shouldDeleteClientByIdSuccessfully() {
+            Client client = buildValidClient();
+
+            when(clientRepository.existsById(client.getId())).thenReturn(true);
+
+            clientService.deleteById(client.getId());
+
+            verify(clientRepository, times(1)).deleteById(client.getId());
+        }
+
+        @Test
+        void shouldThrowExceptionWhenClientIdIsNullForDeletion() {
+            Client client = buildClientWithNullId();
+
+            assertThrows(ResourceNotFoundException.class, () -> clientService.deleteById(client.getId()));
+
+            verify(clientRepository, never()).deleteById(client.getId());
+
+        }
+
+        @Test
+        void shouldThrowExceptionWhenClientNotExistsForDeletion() {
+            Client client = buildValidClient();
+
+            when(clientRepository.existsById(client.getId())).thenReturn(false);
+
+            assertThrows(ResourceNotFoundException.class, () -> clientService.deleteById(client.getId()));
+
+            verify(clientRepository, never()).deleteById(client.getId());
+
+        }
     }
 
     @Nested

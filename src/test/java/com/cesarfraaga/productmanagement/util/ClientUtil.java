@@ -12,6 +12,10 @@ public class ClientUtil {
         return new Client(1L, "César", "12345", "20/01/2003");
     }
 
+    public static Client buildClientWithNullId() {
+        return new Client(null, "César", "12345", "20/01/2003");
+    }
+
     public static ClientDTO buildValidClientDTO() {
         return new ClientDTO(1L, "César", "12345", "20/01/2003");
     }
