@@ -29,5 +29,9 @@ public class Product {
     @Column(name = "quantity")
     private Integer quantity;
 
+    @ManyToOne
+    @JoinColumn(name = "shopping_cart_id", nullable = false)
+    private ShoppingCart shoppingCart;
+
 }
 

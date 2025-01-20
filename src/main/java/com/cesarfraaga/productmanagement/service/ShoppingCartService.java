@@ -20,9 +20,9 @@ public class ShoppingCartService {
 
     public ShoppingCartDTO save(ShoppingCartDTO shoppingCartDTO) {
 
-        if (shoppingCartDTO.getProductsIds() == null)
+        /*if (shoppingCartDTO.getProductsIds() == null)
             throw new IllegalArgumentException("Product Id cannot be null or empty.");
-
+         */
         ShoppingCart shoppingCart = shoppingCartMapper.toEntityShoppingCart(shoppingCartDTO);
         shoppingCart = shoppingCartRepository.save(shoppingCart);
         return shoppingCartMapper.toDTOShoppingCart(shoppingCart);
@@ -32,9 +32,9 @@ public class ShoppingCartService {
         if (shoppingCartDTO.getId() == null || !shoppingCartRepository.existsById(shoppingCartDTO.getId()))
             throw new ResourceNotFoundException("Shopping Cart not found with ID " + shoppingCartDTO.getId() + ".");
 
-        if (shoppingCartDTO.getProductsIds().isEmpty())
+        /*if (shoppingCartDTO.getProductsIds().isEmpty())
             throw new ResourceNotFoundException("Shopping Cart is empty.");
-
+         */
         ShoppingCart shoppingCart = shoppingCartMapper.toEntityShoppingCart(shoppingCartDTO);
         shoppingCart = shoppingCartRepository.save(shoppingCart);
         return shoppingCartMapper.toDTOShoppingCart(shoppingCart);

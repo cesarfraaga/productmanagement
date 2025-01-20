@@ -12,5 +12,7 @@ public class SaleDTO { // Testar JSON Property Snake Case
     private Long clientId;
     private Long shoppingCartId;
     private LocalDateTime salesDate;
+    private ClientDTO clientDTO;
+    private ShoppingCartDTO shoppingCartDTO;
 
 }

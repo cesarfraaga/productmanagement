@@ -20,13 +20,15 @@ public class Sale {
     @Column(name = "id")
     private Long id;
 
-    @Column(name = "client_id")
-    private Long clientId;
-
-    @Column(name = "shopping_cart_id")
-    private Long shoppingCartId;
-
     @Column(name = "sales_date")
     private LocalDateTime salesDate;
+
+    @ManyToOne
+    @JoinColumn(name = "client_id", nullable = false)
+    private Client client;
+
+    @OneToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name = "shopping_cart_id", referencedColumnName = "id")
+    private ShoppingCart shoppingCart;
 
 }

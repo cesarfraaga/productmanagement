@@ -8,5 +8,5 @@ import java.util.List;
 public class ShoppingCartDTO {
 
     private Long id;
-    private List<Long> productsIds;
+    private List<ProductDTO> productsDTO;
 }
