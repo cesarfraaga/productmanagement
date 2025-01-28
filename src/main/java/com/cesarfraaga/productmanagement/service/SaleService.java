@@ -25,18 +25,16 @@ public class SaleService {
 
     // Encapsular as validações específicas em um método privado
     public SaleDTO createSale(SaleDTO saleDTO) {
-        if (saleDTO.getClientId() == null)
+        if (saleDTO.getClientDTO().getId() == null)
             throw new IllegalArgumentException("Client ID cannot be null or empty.");
-        if (saleDTO.getShoppingCartId() == null)
+        if (saleDTO.getShoppingCartDTO().getId() == null)
             throw new IllegalArgumentException("Shopping Cart ID cannot be null or empty.");
 
-        clientRepository.findById(saleDTO.getClientId())
-                .orElseThrow(() -> new ResourceNotFoundException("Client not found with id " + saleDTO.getClientId() +"."));
+        clientRepository.findById(saleDTO.getClientDTO().getId())
+                .orElseThrow(() -> new ResourceNotFoundException("Client not found with id " + saleDTO.getClientDTO().getId() +"."));
 
-        shoppingCartRepository.findById(saleDTO.getShoppingCartId())
+        shoppingCartRepository.findById(saleDTO.getShoppingCartDTO().getId())
                 .orElseThrow(() -> new ResourceNotFoundException("Shopping Cart not found"));
-
-        // Eu recebo um ShoppingCartId e ele precisa estar ligado ao ClientId e precisa ter os produtos nele;
 
         Sale sale = saleMapper.toEntitySale(saleDTO);
         sale = saleRepository.save(sale);
@@ -46,9 +44,9 @@ public class SaleService {
     public SaleDTO update(SaleDTO saleDTO) {
         if (saleDTO.getId() == null || !saleRepository.existsById(saleDTO.getId()))
             throw new ResourceNotFoundException("Sale not found with ID " + saleDTO.getId() + ".");
-        if (saleDTO.getClientId() == null)
+        if (saleDTO.getClientDTO().getId() == null)
             throw new IllegalArgumentException("Client ID cannot be null or empty.");
-        if (saleDTO.getShoppingCartId() == null)
+        if (saleDTO.getShoppingCartDTO().getId() == null)
             throw new IllegalArgumentException("Shopping Cart ID cannot be null or empty.");
 
         Sale sale = saleMapper.toEntitySale(saleDTO);
