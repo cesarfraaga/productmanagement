@@ -25,15 +25,7 @@ public class ClientService {
     private final int MIN_LENGTH_CLIENT_NAME = 2;
 
     public ClientDTO save(ClientDTO clientDTO) {
-        if (clientDTO.getName() == null || clientDTO.getName().isBlank())
-            throw new ResourceNotFoundException(CLIENT_NAME_NULL_OR_EMPTY_MESSAGE);
-        if (clientDTO.getName().length() < MIN_LENGTH_CLIENT_NAME || clientDTO.getName().length() > MAX_LENGTH_CLIENT_NAME)
-            throw new IllegalArgumentException(CLIENT_NAME_LENGTH_MESSAGE);
-
-        if (clientDTO.getCPF() == null || clientDTO.getCPF().isBlank())
-            throw new ResourceNotFoundException(CLIENT_CPF_NULL_OR_EMPTY_MESSAGE);
-        if (clientDTO.getBirthDay() == null || clientDTO.getBirthDay().isBlank())
-            throw new ResourceNotFoundException(CLIENT_BIRTHDAY_NULL_OR_EMPTY_MESSAGE);
+        validateBeforeSaveOrUpdate(clientDTO);
 
         Client client = clientMapper.clientToEntity(clientDTO);
         client = repository.save(client);
@@ -43,15 +35,8 @@ public class ClientService {
     public ClientDTO update(ClientDTO clientDTO) {
         if (clientDTO.getId() == null || !repository.existsById(clientDTO.getId()))
             throw new ResourceNotFoundException(CLIENT_ID_NOT_FOUND_MESSAGE + clientDTO.getId() + PERIOD);
-        if (clientDTO.getName() == null || clientDTO.getName().isBlank())
-            throw new ResourceNotFoundException(CLIENT_NAME_NULL_OR_EMPTY_MESSAGE);
-        if (clientDTO.getName().length() < MIN_LENGTH_CLIENT_NAME || clientDTO.getName().length() > MAX_LENGTH_CLIENT_NAME)
-            throw new IllegalArgumentException(CLIENT_NAME_LENGTH_MESSAGE);
 
-        if (clientDTO.getCPF() == null || clientDTO.getCPF().isBlank())
-            throw new ResourceNotFoundException(CLIENT_CPF_NULL_OR_EMPTY_MESSAGE);
-        if (clientDTO.getBirthDay() == null || clientDTO.getBirthDay().isBlank())
-            throw new ResourceNotFoundException(CLIENT_BIRTHDAY_NULL_OR_EMPTY_MESSAGE);
+        validateBeforeSaveOrUpdate(clientDTO);
 
         Client client = clientMapper.clientToEntity(clientDTO);
         client = repository.save(client);
@@ -87,5 +72,16 @@ public class ClientService {
         }
         return clientDTOList;
     }
-    //Criar método validateBeforeSaveOrUpdate para reutilização de código
+
+    private void validateBeforeSaveOrUpdate(ClientDTO clientDTO) {
+        if (clientDTO.getName() == null || clientDTO.getName().isBlank())
+            throw new ResourceNotFoundException(CLIENT_NAME_NULL_OR_EMPTY_MESSAGE);
+        if (clientDTO.getName().length() < MIN_LENGTH_CLIENT_NAME || clientDTO.getName().length() > MAX_LENGTH_CLIENT_NAME)
+            throw new IllegalArgumentException(CLIENT_NAME_LENGTH_MESSAGE);
+
+        if (clientDTO.getCPF() == null || clientDTO.getCPF().isBlank())
+            throw new ResourceNotFoundException(CLIENT_CPF_NULL_OR_EMPTY_MESSAGE);
+        if (clientDTO.getBirthDay() == null || clientDTO.getBirthDay().isBlank())
+            throw new ResourceNotFoundException(CLIENT_BIRTHDAY_NULL_OR_EMPTY_MESSAGE);
+    }
 }
