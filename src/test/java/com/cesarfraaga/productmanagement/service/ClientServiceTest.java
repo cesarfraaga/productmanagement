@@ -49,7 +49,7 @@ public class ClientServiceTest {
 
             assertEquals(clientDTO.getId(), response.getId());  //garante que o valor <response.getId()> é igual ao valor esperado <clientDTO.getId()>
             assert response.getName().equals(clientDTO.getName());
-            assert response.getCPF().equals(clientDTO.getCPF());
+            assert response.getCpf().equals(clientDTO.getCpf());
             assert response.getBirthDay().equals(clientDTO.getBirthDay());
 
         }
@@ -139,7 +139,7 @@ public class ClientServiceTest {
 
             assertEquals(clientDTO.getId(), response.getId());
             assert response.getName().equals(clientDTO.getName());
-            assert response.getCPF().equals(clientDTO.getCPF());
+            assert response.getCpf().equals(clientDTO.getCpf());
             assert response.getBirthDay().equals(clientDTO.getBirthDay());
         }
 
@@ -249,7 +249,7 @@ public class ClientServiceTest {
             assertNotNull(response);
             assertEquals(client.getId(), response.getId());
             assertEquals(client.getName(), response.getName());
-            assertEquals(client.getCPF(), response.getCPF());
+            assertEquals(client.getCpf(), response.getCpf());
             assertEquals(client.getBirthDay(), response.getBirthDay());
 
             verify(clientRepository, times(1)).findById(client.getId());
