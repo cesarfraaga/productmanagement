@@ -36,13 +36,9 @@ public class ProductService {
         if (dto.getPrice().compareTo(BigDecimal.ZERO) <= 0)
             throw new IllegalArgumentException("Price must be greater than zero.");
 
-        try {
-            Product product = productMapper.toEntity(dto);
-            product = productRepository.save(product);
-            return productMapper.toDTO(product);
-        } catch (DataIntegrityViolationException ex) {
-            throw new IllegalArgumentException("A product with this name already exists.");
-        }
+        Product product = productMapper.toEntity(dto);
+        product = productRepository.save(product);
+        return productMapper.toDTO(product);
     }
 
     public ProductDTO update(ProductDTO dto) {
