@@ -1,16 +1,15 @@
 package com.cesarfraaga.productmanagement.entity;
 
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.RequiredArgsConstructor;
+import lombok.*;
 
 import java.util.ArrayList;
 import java.util.List;
 
-@AllArgsConstructor
-@Entity
 @Getter
+@Setter
+@NoArgsConstructor
+@Entity
 @Table(name = "client")
 public class Client {
 
@@ -22,8 +21,8 @@ public class Client {
     @Column(name = "name")
     private String name;
 
-    @Column(name = "cpf")
-    private String CPF;
+    @Column(name = "cpf", unique = true)
+    private String cpf;
 
     @Column(name = "birthday")
     private String birthDay;
