@@ -20,9 +20,6 @@ public class Sale {
     @Column(name = "id")
     private Long id;
 
-    @Column(name = "sales_date")
-    private LocalDateTime salesDate;
-
     @ManyToOne
     @JoinColumn(name = "client_id", nullable = false)
     private Client client;

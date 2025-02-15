@@ -9,7 +9,6 @@ import java.util.List;
 public class SaleDTO { // Testar JSON Property Snake Case
 
     private Long id;
-    private LocalDateTime salesDate;
     private ClientDTO clientDTO;
     private ShoppingCartDTO shoppingCartDTO;
 
