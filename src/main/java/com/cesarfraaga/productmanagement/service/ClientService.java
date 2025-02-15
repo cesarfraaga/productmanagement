@@ -27,9 +27,9 @@ public class ClientService {
     public ClientDTO save(ClientDTO clientDTO) {
         validateBeforeSaveOrUpdate(clientDTO);
 
-        Client client = clientMapper.clientToEntity(clientDTO);
-        client = repository.save(client);
-        return clientMapper.clientToDTO(client);
+            Client client = clientMapper.clientToEntity(clientDTO);
+            client = repository.save(client);
+            return clientMapper.clientToDTO(client);
     }
 
     public ClientDTO update(ClientDTO clientDTO) {
@@ -79,7 +79,7 @@ public class ClientService {
         if (clientDTO.getName().length() < MIN_LENGTH_CLIENT_NAME || clientDTO.getName().length() > MAX_LENGTH_CLIENT_NAME)
             throw new IllegalArgumentException(CLIENT_NAME_LENGTH_MESSAGE);
 
-        if (clientDTO.getCPF() == null || clientDTO.getCPF().isBlank())
+        if (clientDTO.getCpf() == null || clientDTO.getCpf().isBlank())
             throw new ResourceNotFoundException(CLIENT_CPF_NULL_OR_EMPTY_MESSAGE);
         if (clientDTO.getBirthDay() == null || clientDTO.getBirthDay().isBlank())
             throw new ResourceNotFoundException(CLIENT_BIRTHDAY_NULL_OR_EMPTY_MESSAGE);
