@@ -5,6 +5,8 @@ import lombok.Getter;
 import lombok.Setter;
 
 import java.math.BigDecimal;
+import java.util.ArrayList;
+import java.util.List;
 
 @Getter
 @Setter
@@ -17,7 +19,7 @@ public class Product {
     @Column(name = "id")
     private Long id;
 
-    @Column(name = "name", nullable = false, length = 100)
+    @Column(name = "name",unique = true, nullable = false, length = 100)
     private String name;
 
     @Column(name = "price", precision = 10, scale = 2)
@@ -29,9 +31,6 @@ public class Product {
     @Column(name = "quantity")
     private Integer quantity;
 
-    @ManyToOne
-    @JoinColumn(name = "shopping_cart_id", nullable = false)
-    private ShoppingCart shoppingCart;
-
+    @ManyToMany(mappedBy = "products")
+    private List<ShoppingCart> shoppingCarts = new ArrayList<>();
 }
-
