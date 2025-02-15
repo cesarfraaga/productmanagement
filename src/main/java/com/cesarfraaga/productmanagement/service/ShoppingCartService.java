@@ -1,8 +1,10 @@
 package com.cesarfraaga.productmanagement.service;
 
 import com.cesarfraaga.productmanagement.dto.ShoppingCartDTO;
+import com.cesarfraaga.productmanagement.entity.Product;
 import com.cesarfraaga.productmanagement.entity.ShoppingCart;
 import com.cesarfraaga.productmanagement.exception.ResourceNotFoundException;
+import com.cesarfraaga.productmanagement.repository.ProductRepository;
 import com.cesarfraaga.productmanagement.repository.ShoppingCartRepository;
 import com.cesarfraaga.productmanagement.util.ShoppingCartMapper;
 import lombok.RequiredArgsConstructor;
@@ -17,13 +19,14 @@ public class ShoppingCartService {
 
     private final ShoppingCartRepository shoppingCartRepository;
     private final ShoppingCartMapper shoppingCartMapper;
+    private final ProductRepository productRepository;
 
     public ShoppingCartDTO save(ShoppingCartDTO shoppingCartDTO) {
-
-        /*if (shoppingCartDTO.getProductsIds() == null)
-            throw new IllegalArgumentException("Product Id cannot be null or empty.");
-         */
         ShoppingCart shoppingCart = shoppingCartMapper.toEntityShoppingCart(shoppingCartDTO);
+
+        List<Product> products = productRepository.findAllById(shoppingCartDTO.getProductsIds()); //Carrega os produtos do banco usando os IDs
+        shoppingCart.setProducts(products); //Associando os produtos ao carrinho (sem sobrescrever a relação)
+
         shoppingCart = shoppingCartRepository.save(shoppingCart);
         return shoppingCartMapper.toDTOShoppingCart(shoppingCart);
     }
@@ -41,11 +44,9 @@ public class ShoppingCartService {
     }
 
     public ShoppingCartDTO findById(Long id) {
-        if (id == null) {
-            throw new IllegalArgumentException("Id cannot be null.");
-        }
-        ShoppingCart shoppingCart = shoppingCartRepository.findById(id).
-                orElseThrow(() -> new ResourceNotFoundException("Shopping Cart not found with ID " + id + "."));
+        ShoppingCart shoppingCart = shoppingCartRepository.findByIdWithProducts(id)
+                .orElseThrow(() -> new ResourceNotFoundException("ShoppingCart not found"));
+
         return shoppingCartMapper.toDTOShoppingCart(shoppingCart);
     }
 
