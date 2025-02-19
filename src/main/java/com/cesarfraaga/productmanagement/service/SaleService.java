@@ -23,7 +23,7 @@ public class SaleService {
     private final ClientRepository clientRepository;
     private final ShoppingCartRepository shoppingCartRepository;
 
-    // Encapsular as validações específicas em um método privado
+    //Preciso Encapsular as validações específicas em um método privado
     public SaleDTO createSale(SaleDTO saleDTO) {
         if (saleDTO.getClientDTO().getId() == null)
             throw new IllegalArgumentException("Client ID cannot be null or empty.");
