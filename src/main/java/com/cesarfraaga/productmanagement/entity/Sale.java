@@ -24,7 +24,7 @@ public class Sale {
     @JoinColumn(name = "client_id", nullable = false)
     private Client client;
 
-    @OneToOne(cascade = CascadeType.ALL)
+    @OneToOne(cascade = CascadeType.MERGE)
     @JoinColumn(name = "shopping_cart_id", referencedColumnName = "id")
     private ShoppingCart shoppingCart;
 

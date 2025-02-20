@@ -1,13 +1,23 @@
 package com.cesarfraaga.productmanagement.dto;
 
-import lombok.Data;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import lombok.Getter;
+import lombok.Setter;
 
 import java.util.List;
 
-@Data
+@Getter
+@Setter
 public class ShoppingCartDTO {
     private Long id;
     private List<ProductDTO> productsDTO;
-    private List<Long> productsIds;
+
+    @JsonIgnore
+    public List<Long> getProductsIds() {
+        return productsDTO.stream()
+                .map(ProductDTO::getId)
+                .toList();
+    }
+
 }
 

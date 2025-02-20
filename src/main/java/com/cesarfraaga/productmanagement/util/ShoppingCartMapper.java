@@ -5,7 +5,7 @@ import com.cesarfraaga.productmanagement.entity.ShoppingCart;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 
-@Mapper(componentModel = "spring", uses = ProductMapper.class)
+@Mapper(componentModel = "spring", uses = {ProductMapper.class})
 public interface ShoppingCartMapper {
 
     @Mapping(source = "products", target = "productsDTO")

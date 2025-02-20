@@ -18,7 +18,7 @@ public class ShoppingCartController {
 
     @PostMapping(value = "/save")
     public ResponseEntity<ShoppingCartDTO> save(@RequestBody ShoppingCartDTO shoppingCartDTO) {
-        ShoppingCartDTO savedShoppingCartDTO = service.save(shoppingCartDTO);
+        ShoppingCartDTO savedShoppingCartDTO = service.createShoppingCart(shoppingCartDTO);
         return ResponseEntity.status(HttpStatus.CREATED).body(savedShoppingCartDTO);
     }
 

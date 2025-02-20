@@ -21,10 +21,12 @@ public class ShoppingCartService {
     private final ShoppingCartMapper shoppingCartMapper;
     private final ProductRepository productRepository;
 
-    public ShoppingCartDTO save(ShoppingCartDTO shoppingCartDTO) {
+    public ShoppingCartDTO createShoppingCart(ShoppingCartDTO shoppingCartDTO) {
         ShoppingCart shoppingCart = shoppingCartMapper.toEntityShoppingCart(shoppingCartDTO);
 
-        List<Product> products = productRepository.findAllById(shoppingCartDTO.getProductsIds()); //Carrega os produtos do banco usando os IDs
+        List<Long> productsIds = shoppingCartDTO.getProductsIds();
+
+        List<Product> products = productRepository.findAllById(productsIds); //Carrega os produtos do banco usando os IDs
         shoppingCart.setProducts(products); //Associando os produtos ao carrinho (sem sobrescrever a relação)
 
         shoppingCart = shoppingCartRepository.save(shoppingCart);
