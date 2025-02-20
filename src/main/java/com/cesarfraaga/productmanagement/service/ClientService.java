@@ -28,8 +28,7 @@ public class ClientService {
         validateBeforeSaveOrUpdate(clientDTO);
 
             Client client = clientMapper.clientToEntity(clientDTO);
-            client = repository.save(client);
-            return clientMapper.clientToDTO(client);
+            return saveAndReturnDTO(client);
     }
 
     public ClientDTO update(ClientDTO clientDTO) {
@@ -39,8 +38,7 @@ public class ClientService {
         validateBeforeSaveOrUpdate(clientDTO);
 
         Client client = clientMapper.clientToEntity(clientDTO);
-        client = repository.save(client);
-        return clientMapper.clientToDTO(client);
+        return saveAndReturnDTO(client);
     }
 
     public ClientDTO findById(Long id) {
@@ -83,5 +81,10 @@ public class ClientService {
             throw new ResourceNotFoundException(CLIENT_CPF_NULL_OR_EMPTY_MESSAGE);
         if (clientDTO.getBirthDay() == null || clientDTO.getBirthDay().isBlank())
             throw new ResourceNotFoundException(CLIENT_BIRTHDAY_NULL_OR_EMPTY_MESSAGE);
+    }
+
+    private ClientDTO saveAndReturnDTO(Client client) {
+        client = repository.save(client);
+        return clientMapper.clientToDTO(client);
     }
 }

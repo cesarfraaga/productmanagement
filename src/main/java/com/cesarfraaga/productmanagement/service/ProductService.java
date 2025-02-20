@@ -1,5 +1,6 @@
 package com.cesarfraaga.productmanagement.service;
 
+import com.cesarfraaga.productmanagement.dto.ClientDTO;
 import com.cesarfraaga.productmanagement.dto.ProductDTO;
 import com.cesarfraaga.productmanagement.entity.Product;
 import com.cesarfraaga.productmanagement.exception.ResourceNotFoundException;
@@ -13,6 +14,9 @@ import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
 
+import static com.cesarfraaga.productmanagement.util.ExceptionConstants.*;
+import static com.cesarfraaga.productmanagement.util.ExceptionConstants.CLIENT_BIRTHDAY_NULL_OR_EMPTY_MESSAGE;
+
 @RequiredArgsConstructor
 @Service
 public class ProductService {
@@ -22,38 +26,20 @@ public class ProductService {
 
     public ProductDTO save(ProductDTO dto) {
 
-        if (dto.getName() == null || dto.getName().isBlank())
-            throw new IllegalArgumentException("Name cannot be null or empty.");
-        if (dto.getName().length() < 2)
-            throw new IllegalArgumentException("Name is too short. The minimum length allowed is 2 characters.");
-        if (dto.getName().length() > 50)
-            throw new DataIntegrityViolationException("Name is too long. Maximum length allowed is 50 characters.");
-/*        if (!(dto.getName() instanceof String))
-            throw new IllegalArgumentException("Name must be a valid string.");*/
-
-        if (dto.getDescription().isBlank())
-            throw new IllegalArgumentException("Description cannot be null or empty.");
-        if (dto.getPrice().compareTo(BigDecimal.ZERO) <= 0)
-            throw new IllegalArgumentException("Price must be greater than zero.");
+        validateBeforeSaveOrUpdate(dto);
 
         Product product = productMapper.toEntity(dto);
-        product = productRepository.save(product);
-        return productMapper.toDTO(product);
+        return saveAndReturnDTO(product);
     }
 
     public ProductDTO update(ProductDTO dto) {
         if (dto.getId() == null || !productRepository.existsById(dto.getId()))
             throw new ResourceNotFoundException("Product not found with ID " + dto.getId() + ".");
-        if (dto.getName().isBlank())
-            throw new IllegalArgumentException("Name cannot be null or empty.");
-        if (dto.getDescription().isBlank())
-            throw new IllegalArgumentException("Description cannot be null or empty.");
-        if (dto.getPrice().compareTo(BigDecimal.ZERO) <= 0)
-            throw new IllegalArgumentException("Price must be greater than zero.");
+
+        validateBeforeSaveOrUpdate(dto);
 
         Product product = productMapper.toEntity(dto);
-        product = productRepository.save(product);
-        return productMapper.toDTO(product);
+        return saveAndReturnDTO(product);
     }
 
     public ProductDTO findById(Long id) {
@@ -82,6 +68,25 @@ public class ProductService {
             productDTOList.add(dto);
         }
         return productDTOList;
+    }
+
+    private void validateBeforeSaveOrUpdate(ProductDTO dto) {
+        if (dto.getName() == null || dto.getName().isBlank())
+            throw new IllegalArgumentException("Name cannot be null or empty.");
+        if (dto.getName().length() < 2)
+            throw new IllegalArgumentException("Name is too short. The minimum length allowed is 2 characters.");
+        if (dto.getName().length() > 50)
+            throw new DataIntegrityViolationException("Name is too long. Maximum length allowed is 50 characters.");
+
+        if (dto.getDescription().isBlank())
+            throw new IllegalArgumentException("Description cannot be null or empty.");
+        if (dto.getPrice().compareTo(BigDecimal.ZERO) <= 0)
+            throw new IllegalArgumentException("Price must be greater than zero.");
+    }
+
+    private ProductDTO saveAndReturnDTO(Product product) {
+        product = productRepository.save(product);
+        return productMapper.toDTO(product);
     }
 
 }
