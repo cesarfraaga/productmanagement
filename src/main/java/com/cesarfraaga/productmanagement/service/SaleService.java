@@ -28,7 +28,6 @@ public class SaleService {
     private final ClientRepository clientRepository;
     private final ClientMapper clientMapper;
 
-    private final ShoppingCartRepository shoppingCartRepository;
     private final ShoppingCartService shoppingCartService;
 
     //Preciso Encapsular as validações específicas em um método privado
