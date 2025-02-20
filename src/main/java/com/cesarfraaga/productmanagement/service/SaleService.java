@@ -8,7 +8,6 @@ import com.cesarfraaga.productmanagement.entity.Sale;
 import com.cesarfraaga.productmanagement.exception.ResourceNotFoundException;
 import com.cesarfraaga.productmanagement.repository.ClientRepository;
 import com.cesarfraaga.productmanagement.repository.SaleRepository;
-import com.cesarfraaga.productmanagement.repository.ShoppingCartRepository;
 import com.cesarfraaga.productmanagement.util.ClientMapper;
 import com.cesarfraaga.productmanagement.util.SaleMapper;
 import lombok.RequiredArgsConstructor;
