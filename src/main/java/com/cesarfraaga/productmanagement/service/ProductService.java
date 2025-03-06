@@ -1,13 +1,11 @@
 package com.cesarfraaga.productmanagement.service;
 
-import com.cesarfraaga.productmanagement.dto.ClientDTO;
 import com.cesarfraaga.productmanagement.dto.ProductDTO;
 import com.cesarfraaga.productmanagement.entity.Product;
 import com.cesarfraaga.productmanagement.exception.ResourceNotFoundException;
 import com.cesarfraaga.productmanagement.repository.ProductRepository;
 import com.cesarfraaga.productmanagement.util.ProductMapper;
 import lombok.RequiredArgsConstructor;
-import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
@@ -15,7 +13,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 import static com.cesarfraaga.productmanagement.util.ExceptionConstants.*;
-import static com.cesarfraaga.productmanagement.util.ExceptionConstants.CLIENT_BIRTHDAY_NULL_OR_EMPTY_MESSAGE;
 
 @RequiredArgsConstructor
 @Service
@@ -23,6 +20,9 @@ public class ProductService {
 
     private final ProductRepository productRepository;
     private final ProductMapper productMapper;
+
+    private final int MAX_LENGTH_PRODUCT_NAME = 50;
+    private final int MIN_LENGTH_PRODUCT_NAME = 2;
 
     public ProductDTO save(ProductDTO dto) {
 
@@ -34,7 +34,7 @@ public class ProductService {
 
     public ProductDTO update(ProductDTO dto) {
         if (dto.getId() == null || !productRepository.existsById(dto.getId()))
-            throw new ResourceNotFoundException("Product not found with ID " + dto.getId() + ".");
+            throw new ResourceNotFoundException(PRODUCT_ID_NOT_FOUND_MESSAGE + dto.getId() + PERIOD);
 
         validateBeforeSaveOrUpdate(dto);
 
@@ -44,16 +44,16 @@ public class ProductService {
 
     public ProductDTO findById(Long id) {
         if (id == null) {
-            throw new IllegalArgumentException("Id cannot be null.");
+            throw new IllegalArgumentException(PRODUCT_ID_NOT_NULL_MESSAGE);
         }
         Product product = productRepository.findById(id).
-                orElseThrow(() -> new ResourceNotFoundException("Product not found with ID " + id + "."));
+                orElseThrow(() -> new ResourceNotFoundException(PRODUCT_ID_NOT_FOUND_MESSAGE + id + PERIOD));
         return productMapper.toDTO(product);
     }
 
     public void deleteById(Long id) {
         if (!productRepository.existsById(id))
-            throw new ResourceNotFoundException("Product not found with ID " + id + ".");
+            throw new ResourceNotFoundException(PRODUCT_ID_NOT_FOUND_MESSAGE + id + PERIOD);
         productRepository.deleteById(id);
     }
 
@@ -61,7 +61,7 @@ public class ProductService {
         List<Product> productList = productRepository.findAll();
         List<ProductDTO> productDTOList = new ArrayList<>();
         if (productList.isEmpty())
-            throw new ResourceNotFoundException("No products available.");
+            throw new ResourceNotFoundException(PRODUCT_NO_AVAILABLE_MESSAGE);
 
         for (Product product : productList) {
             ProductDTO dto = productMapper.toDTO(product);
@@ -72,16 +72,14 @@ public class ProductService {
 
     private void validateBeforeSaveOrUpdate(ProductDTO dto) {
         if (dto.getName() == null || dto.getName().isBlank())
-            throw new IllegalArgumentException("Name cannot be null or empty.");
-        if (dto.getName().length() < 2)
-            throw new IllegalArgumentException("Name is too short. The minimum length allowed is 2 characters.");
-        if (dto.getName().length() > 50)
-            throw new DataIntegrityViolationException("Name is too long. Maximum length allowed is 50 characters.");
+            throw new IllegalArgumentException(PRODUCT_NAME_NULL_OR_EMPTY_MESSAGE);
+        if (dto.getName().length() < MIN_LENGTH_PRODUCT_NAME || dto.getName().length() > MAX_LENGTH_PRODUCT_NAME)
+            throw new IllegalArgumentException(PRODUCT_NAME_LENGTH_MESSAGE);
 
         if (dto.getDescription().isBlank())
-            throw new IllegalArgumentException("Description cannot be null or empty.");
+            throw new IllegalArgumentException(PRODUCT_DESCRIPTION_NULL_OR_EMPTY_MESSAGE);
         if (dto.getPrice().compareTo(BigDecimal.ZERO) <= 0)
-            throw new IllegalArgumentException("Price must be greater than zero.");
+            throw new IllegalArgumentException(PRODUCT_PRICE_GREATER_THAN_ZERO_MESSAGE);
     }
 
     private ProductDTO saveAndReturnDTO(Product product) {

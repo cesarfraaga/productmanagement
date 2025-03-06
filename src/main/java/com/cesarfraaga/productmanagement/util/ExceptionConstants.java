@@ -10,9 +10,28 @@ public class ExceptionConstants {
     public static final String CLIENT_ID_NOT_FOUND_MESSAGE = "Client not found with ID ";
     public static final String CLIENT_NOT_FOUND_MESSAGE = "Client not found.";
     public static final String CLIENT_NAME_NULL_OR_EMPTY_MESSAGE = "Name cannot be null or empty.";
-    public static final String CLIENT_ID_NULL_MESSAGE = "Id cannot be null.";
+    public static final String CLIENT_ID_NULL_MESSAGE = "Client id cannot be null.";
     public static final String CLIENT_NAME_LENGTH_MESSAGE = "Name cannot be less than 2 or longer than 50 characters.";
     public static final String CLIENT_CPF_NULL_OR_EMPTY_MESSAGE = "CPF cannot be null or empty.";
     public static final String CLIENT_BIRTHDAY_NULL_OR_EMPTY_MESSAGE = "Birth day cannot be null or empty.";
     public static final String CLIENTS_NOT_FOUND_MESSAGE = "No clients found.";
+
+    public static final String PRODUCT_ID_NOT_FOUND_MESSAGE = "Product not found with ID ";
+    public static final String PRODUCT_NAME_NULL_OR_EMPTY_MESSAGE = "Product name cannot be null or empty.";
+    public static final String PRODUCT_NAME_LENGTH_MESSAGE = "Product name cannot be less than 2 or longer than 50 characters.";
+    public static final String PRODUCT_DESCRIPTION_NULL_OR_EMPTY_MESSAGE = "Description cannot be null or empty.";
+    public static final String PRODUCT_NO_AVAILABLE_MESSAGE = "No products available.";
+    public static final String PRODUCT_PRICE_GREATER_THAN_ZERO_MESSAGE = "Price must be greater than zero.";
+    public static final String PRODUCT_ID_NOT_NULL_MESSAGE = "Product id cannot be null.";
+
+    public static final String SHOPPINGCART_PRODUCT_ID_IS_NULL_OR_EMPTY = "";
+    public static final String SHOPPINGCART_ID_NOT_FOUND_MESSAGE = "Shopping Cart not found with ID " ;
+    public static final String SHOPPINGCART_NOT_FOUND_MESSAGE = "Shopping Cart not found.";
+    public static final String SHOPPINGCART_NO_AVAILABLE_MESSAGE = "No shopping carts available.";
+
+    public static final String SALE_SHOPPINGCART_NOT_NULL_OR_EMPTY_MESSAGE = "Shopping cart cannot be null or empty.";
+    public static final String SALE_CLIENT_ID_NOT_NULL_OR_EMPTY_MESSAGE = "Client id cannot be null or empty.";
+    public static final String SALE_ID_NOT_FOUND_MESSAGE = "Sale not found with ID ";
+    public static final String SALE_NOT_FOUND_MESSAGE = "Sale not found.";
+    public static final String SALE_NOT_FOUND_FOR_DELETE_MESSAGE = "Sale not found for delete.";
 }

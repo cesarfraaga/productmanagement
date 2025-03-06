@@ -13,6 +13,8 @@ import org.springframework.stereotype.Service;
 import java.util.ArrayList;
 import java.util.List;
 
+import static com.cesarfraaga.productmanagement.util.ExceptionConstants.*;
+
 @RequiredArgsConstructor
 @Service
 public class ShoppingCartService {
@@ -22,6 +24,10 @@ public class ShoppingCartService {
     private final ProductRepository productRepository;
 
     public ShoppingCartDTO createShoppingCart(ShoppingCartDTO shoppingCartDTO) {
+        if (shoppingCartDTO.getProductsIds() == null || shoppingCartDTO.getProductsIds().isEmpty())
+            throw new IllegalArgumentException(SHOPPINGCART_PRODUCT_ID_IS_NULL_OR_EMPTY);
+
+
         ShoppingCart shoppingCart = shoppingCartMapper.toEntityShoppingCart(shoppingCartDTO);
 
         List<Long> productsIds = shoppingCartDTO.getProductsIds();
@@ -35,7 +41,7 @@ public class ShoppingCartService {
 
     public ShoppingCartDTO update(ShoppingCartDTO shoppingCartDTO) {
         if (shoppingCartDTO.getId() == null || !shoppingCartRepository.existsById(shoppingCartDTO.getId()))
-            throw new ResourceNotFoundException("Shopping Cart not found with ID " + shoppingCartDTO.getId() + ".");
+            throw new ResourceNotFoundException(SHOPPINGCART_ID_NOT_FOUND_MESSAGE  + shoppingCartDTO.getId() + PERIOD);
 
         /*if (shoppingCartDTO.getProductsIds().isEmpty())
             throw new ResourceNotFoundException("Shopping Cart is empty.");
@@ -47,14 +53,14 @@ public class ShoppingCartService {
 
     public ShoppingCartDTO findById(Long id) {
         ShoppingCart shoppingCart = shoppingCartRepository.findByIdWithProducts(id)
-                .orElseThrow(() -> new ResourceNotFoundException("ShoppingCart not found"));
+                .orElseThrow(() -> new ResourceNotFoundException(SHOPPINGCART_NOT_FOUND_MESSAGE));
 
         return shoppingCartMapper.toDTOShoppingCart(shoppingCart);
     }
 
     public void deleteById(Long id) {
         if (!shoppingCartRepository.existsById(id))
-            throw new ResourceNotFoundException("Shopping Cart not found with ID " + id + ".");
+            throw new ResourceNotFoundException(SHOPPINGCART_ID_NOT_FOUND_MESSAGE + id + PERIOD);
         shoppingCartRepository.deleteById(id);
     }
 
@@ -63,7 +69,7 @@ public class ShoppingCartService {
         List<ShoppingCartDTO> shoppingCartDTOList = new ArrayList<>();
 
         if (shoppingCartList.isEmpty())
-            throw new ResourceNotFoundException("No shopping carts available.");
+            throw new ResourceNotFoundException(SHOPPINGCART_NO_AVAILABLE_MESSAGE);
 
         for (ShoppingCart shoppingCart : shoppingCartList) {
             ShoppingCartDTO shoppingCartDTO = shoppingCartMapper.toDTOShoppingCart(shoppingCart);

@@ -17,6 +17,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
+import static com.cesarfraaga.productmanagement.util.ExceptionConstants.*;
+
 @RequiredArgsConstructor
 @Service
 public class SaleService {
@@ -32,13 +34,13 @@ public class SaleService {
     //Preciso Encapsular as validações específicas em um método privado
     public SaleDTO createSale(SaleDTO saleDTO) {
         if (saleDTO.getClientDTO().getId() == null)
-            throw new IllegalArgumentException("Client ID cannot be null.");
+            throw new IllegalArgumentException(CLIENT_ID_NULL_MESSAGE);
 
         if (Objects.isNull(saleDTO.getShoppingCartDTO()))
-            throw new IllegalArgumentException("Shopping Cart cannot be null.");
+            throw new IllegalArgumentException(SALE_SHOPPINGCART_NOT_NULL_OR_EMPTY_MESSAGE);
 
         Client client = clientRepository.findById(saleDTO.getClientDTO().getId())
-                .orElseThrow(() -> new ResourceNotFoundException("Client not found with id " + saleDTO.getClientDTO().getId() +"."));
+                .orElseThrow(() -> new ResourceNotFoundException(CLIENT_ID_NOT_FOUND_MESSAGE + saleDTO.getClientDTO().getId() + PERIOD));
 
         ClientDTO clientDTO = clientMapper.clientToDTO(client);
         saleDTO.setClientDTO(clientDTO);
@@ -53,11 +55,11 @@ public class SaleService {
 
     public SaleDTO update(SaleDTO saleDTO) {
         if (saleDTO.getId() == null || !saleRepository.existsById(saleDTO.getId()))
-            throw new ResourceNotFoundException("Sale not found with ID " + saleDTO.getId() + ".");
+            throw new ResourceNotFoundException(SALE_ID_NOT_FOUND_MESSAGE + saleDTO.getId() + PERIOD);
         if (saleDTO.getClientDTO().getId() == null)
-            throw new IllegalArgumentException("Client ID cannot be null or empty.");
+            throw new IllegalArgumentException(SALE_CLIENT_ID_NOT_NULL_OR_EMPTY_MESSAGE);
         if (saleDTO.getShoppingCartDTO().getId() == null)
-            throw new IllegalArgumentException("Shopping Cart ID cannot be null or empty.");
+            throw new IllegalArgumentException(SALE_SHOPPINGCART_NOT_NULL_OR_EMPTY_MESSAGE);
 
         Sale sale = saleMapper.toEntitySale(saleDTO);
         sale = saleRepository.save(sale);
@@ -66,13 +68,13 @@ public class SaleService {
 
     public SaleDTO findById(Long id) {
         Sale sale = saleRepository.findById(id).
-                orElseThrow(() -> new ResourceNotFoundException("Sale not found with id + " + id + "."));
+                orElseThrow(() -> new ResourceNotFoundException(SALE_ID_NOT_FOUND_MESSAGE + id + PERIOD));
         return saleMapper.toDTOSale(sale);
     }
 
     public void deleteById(Long id) {
         if (!saleRepository.existsById(id))
-            throw new ResourceNotFoundException("Sale not found for delete");
+            throw new ResourceNotFoundException(SALE_NOT_FOUND_FOR_DELETE_MESSAGE);
         saleRepository.deleteById(id);
     }
 
@@ -81,7 +83,7 @@ public class SaleService {
         List<SaleDTO> saleDTOList = new ArrayList<>();
 
         if (saleList.isEmpty())
-            throw new ResourceNotFoundException("Sale not found.");
+            throw new ResourceNotFoundException(SALE_NOT_FOUND_MESSAGE);
 
         for (Sale sale : saleList) {
             SaleDTO saleDTO = saleMapper.toDTOSale(sale);
