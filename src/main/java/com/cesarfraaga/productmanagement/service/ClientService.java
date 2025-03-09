@@ -21,9 +21,6 @@ public class ClientService {
     private final ClientRepository repository;
     private final ClientMapper clientMapper;
 
-    private final int MAX_LENGTH_CLIENT_NAME = 50;
-    private final int MIN_LENGTH_CLIENT_NAME = 2;
-
     public ClientDTO save(ClientDTO clientDTO) {
         validateBeforeSaveOrUpdate(clientDTO);
 
@@ -72,9 +69,13 @@ public class ClientService {
     }
 
     private void validateBeforeSaveOrUpdate(ClientDTO clientDTO) {
+
+        int maxLengthClientName = 50;
+        int minLengthClientName = 2;
+
         if (clientDTO.getName() == null || clientDTO.getName().isBlank())
             throw new ResourceNotFoundException(CLIENT_NAME_NULL_OR_EMPTY_MESSAGE);
-        if (clientDTO.getName().length() < MIN_LENGTH_CLIENT_NAME || clientDTO.getName().length() > MAX_LENGTH_CLIENT_NAME)
+        if (clientDTO.getName().length() < minLengthClientName || clientDTO.getName().length() > maxLengthClientName)
             throw new IllegalArgumentException(CLIENT_NAME_LENGTH_MESSAGE);
 
         if (clientDTO.getCpf() == null || clientDTO.getCpf().isBlank())

@@ -21,9 +21,6 @@ public class ProductService {
     private final ProductRepository productRepository;
     private final ProductMapper productMapper;
 
-    private final int MAX_LENGTH_PRODUCT_NAME = 50;
-    private final int MIN_LENGTH_PRODUCT_NAME = 2;
-
     public ProductDTO save(ProductDTO dto) {
 
         validateBeforeSaveOrUpdate(dto);
@@ -71,9 +68,13 @@ public class ProductService {
     }
 
     private void validateBeforeSaveOrUpdate(ProductDTO dto) {
+
+        int maxLengthClientName = 50;
+        int minLengthProductName = 2;
+
         if (dto.getName() == null || dto.getName().isBlank())
             throw new IllegalArgumentException(PRODUCT_NAME_NULL_OR_EMPTY_MESSAGE);
-        if (dto.getName().length() < MIN_LENGTH_PRODUCT_NAME || dto.getName().length() > MAX_LENGTH_PRODUCT_NAME)
+        if (dto.getName().length() < minLengthProductName || dto.getName().length() > maxLengthClientName)
             throw new IllegalArgumentException(PRODUCT_NAME_LENGTH_MESSAGE);
 
         if (dto.getDescription().isBlank())
