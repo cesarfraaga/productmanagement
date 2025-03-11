@@ -12,6 +12,7 @@ import java.util.List;
 @RestController
 @RequestMapping(value = "client")
 public class ClientController {
+
     @Autowired
     private ClientService service;
 
