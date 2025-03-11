@@ -76,11 +76,17 @@ public class ProductService {
             throw new IllegalArgumentException(PRODUCT_NAME_NULL_OR_EMPTY_MESSAGE);
         if (dto.getName().length() < minLengthProductName || dto.getName().length() > maxLengthClientName)
             throw new IllegalArgumentException(PRODUCT_NAME_LENGTH_MESSAGE);
+        if (!dto.getName().matches(BASIC_CHARACTER))
+            throw new IllegalArgumentException(PRODUCT_NAME_NOT_SPECIAL_CHARACTER_MESSAGE);
 
         if (dto.getDescription().isBlank())
             throw new IllegalArgumentException(PRODUCT_DESCRIPTION_NULL_OR_EMPTY_MESSAGE);
+        if (!dto.getDescription().matches(BASIC_CHARACTER))
+            throw new IllegalArgumentException(PRODUCT_DESCRIPTION_NOT_SPECIAL_CHARACTER_MESSAGE);
+
         if (dto.getPrice().compareTo(BigDecimal.ZERO) <= 0)
             throw new IllegalArgumentException(PRODUCT_PRICE_GREATER_THAN_ZERO_MESSAGE);
+        //Preço e quantity
     }
 
     private ProductDTO saveAndReturnDTO(Product product) {
