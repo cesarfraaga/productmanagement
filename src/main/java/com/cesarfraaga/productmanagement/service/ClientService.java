@@ -21,21 +21,31 @@ public class ClientService {
     private final ClientRepository repository;
     private final ClientMapper clientMapper;
 
-    public ClientDTO save(final ClientDTO clientDTO) {
+    public ClientDTO saveClient(final ClientDTO clientDTO) {
         validateBeforeSaveOrUpdate(clientDTO);
 
         Client client = clientMapper.clientToEntity(clientDTO);
         return saveAndReturnDTO(client);
     }
 
-    public ClientDTO update(final ClientDTO clientDTO) {
+    public ClientDTO updateClient(final ClientDTO clientDTO) {
         if (clientDTO.getId() == null || !repository.existsById(clientDTO.getId()))
             throw new ResourceNotFoundException(CLIENT_ID_NOT_FOUND_MESSAGE + clientDTO.getId() + PERIOD);
 
         validateBeforeSaveOrUpdate(clientDTO);
 
-        Client client = clientMapper.clientToEntity(clientDTO);
-        return saveAndReturnDTO(client);
+        Client existingClient = repository.findById(clientDTO.getId())
+                .orElseThrow(() -> new ResourceNotFoundException(CLIENT_ID_NOT_FOUND_MESSAGE + clientDTO.getId() + PERIOD));
+
+        existingClient.setName(clientDTO.getName());
+        existingClient.setCpf(clientDTO.getCpf());
+        existingClient.setBirthDay(clientDTO.getBirthDay());
+        //Solução inicial para o update de usuário (sem mexer nas sales)
+
+        return saveAndReturnDTO(existingClient);
+
+        /*Client client = clientMapper.clientToEntity(clientDTO);
+        return saveAndReturnDTO(client);*/
     }
 
     public ClientDTO findById(final Long id) {
