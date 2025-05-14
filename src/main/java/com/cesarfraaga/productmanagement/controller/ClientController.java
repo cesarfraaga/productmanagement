@@ -18,7 +18,7 @@ public class ClientController {
 
     @PostMapping(value = "/save")
     public ResponseEntity<ClientDTO> saveClient(@RequestBody ClientDTO clientDTO) {
-        ClientDTO savedClient = service.save(clientDTO);
+        ClientDTO savedClient = service.saveClient(clientDTO);
         return ResponseEntity.status(HttpStatus.CREATED).body(savedClient);
     }
 
@@ -38,7 +38,7 @@ public class ClientController {
 
     @PutMapping(value = "/update")
     public ResponseEntity<ClientDTO> updateClient(@RequestBody ClientDTO clientDTO) {
-        ClientDTO updatedClient = service.update(clientDTO);
+        ClientDTO updatedClient = service.updateClient(clientDTO);
         return ResponseEntity.ok(updatedClient);
     }
 
