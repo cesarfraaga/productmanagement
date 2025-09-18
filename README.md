@@ -8,27 +8,27 @@ Durante o desenvolvimento, estou enfrentando desafios interessantes e me esforce
 
 ## 🛠️ Tecnologias Utilizadas
 
--   Java
--   Spring
--   PostgreSQL
+* Java
+* Spring
+* PostgreSQL
 
 ## 🚀 Funcionalidades
 
-  - 📦 Gerenciamento de Produtos
+* 📦 Gerenciamento de Produtos
+* Cadastro, atualização, exclusão e listagem de produtos.
+* Validação de dados dos produtos, como nome único e preço não negativo.
 
- - Cadastro, atualização, exclusão e listagem de produtos.
- - Validação de dados dos produtos, como nome único e preço não negativo.
 
 
-  - 🛍️ Processamento de Vendas
-
- - Realização de vendas com múltiplas validações, incluindo:
- - Verificação da existência de cliente.
+* 🛍️ Processamento de Vendas
+* Realização de vendas com múltiplas validações, incluindo:
+* Verificação da existência de cliente.
 
 ### 👨‍🔧 Status do Projeto
 
-Este projeto está em constante evolução. Atualmente, estou trabalhando na otimização do desempenho e na adição de novas funcionalidades
+Este projeto está em constante evolução, servindo como base para mim e outros programadores que estão no processo de aprendizagem.
 
 ## 📫 Contato
-- E-mail: cesarfraaga@gmail.com
-- LinkedIn: https://www.linkedin.com/in/cesarfraaga/
+
+* E-mail: cesarfraaga@gmail.com
+* LinkedIn: https://www.linkedin.com/in/cesarfraaga/
