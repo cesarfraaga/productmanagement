@@ -31,7 +31,7 @@ public class SaleService {
 
     private final ShoppingCartService shoppingCartService;
 
-    //Preciso Encapsular as validações específicas em um método privado
+    //this logic needs to be further encapsulated
     public SaleDTO createSale(SaleDTO saleDTO) {
         if (saleDTO.getClientDTO().getId() == null)
             throw new IllegalArgumentException(CLIENT_ID_NULL_MESSAGE);
@@ -51,6 +51,7 @@ public class SaleService {
         Sale sale = saleMapper.toEntitySale(saleDTO);
         sale = saleRepository.save(sale);
         return saleMapper.toDTOSale(sale);
+        //error: not returning correct data via postman
     }
 
     public SaleDTO update(SaleDTO saleDTO) {

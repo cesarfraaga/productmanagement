@@ -86,7 +86,8 @@ public class ProductService {
 
         if (dto.getPrice().compareTo(BigDecimal.ZERO) <= 0)
             throw new IllegalArgumentException(PRODUCT_PRICE_GREATER_THAN_ZERO_MESSAGE);
-        //Preço e quantity
+        //price and quantity
+        //this logic needs to be further encapsulated
     }
 
     private ProductDTO saveAndReturnDTO(Product product) {

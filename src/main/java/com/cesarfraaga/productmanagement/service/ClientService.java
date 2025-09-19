@@ -36,7 +36,7 @@ public class ClientService {
 
         Client existingClient = repository.findById(clientDTO.getId())
                 .orElseThrow(() -> new ResourceNotFoundException(CLIENT_ID_NOT_FOUND_MESSAGE + clientDTO.getId() + PERIOD));
-
+        //At some point, i'll need to change the logic. User won't be able to change their cpf, only an administrator can
         existingClient.setName(clientDTO.getName());
         existingClient.setCpf(clientDTO.getCpf());
         existingClient.setBirthDay(clientDTO.getBirthDay());
