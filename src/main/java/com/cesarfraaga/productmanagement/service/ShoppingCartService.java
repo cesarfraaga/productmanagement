@@ -1,5 +1,6 @@
 package com.cesarfraaga.productmanagement.service;
 
+import com.cesarfraaga.productmanagement.dto.ProductDTO;
 import com.cesarfraaga.productmanagement.dto.ShoppingCartDTO;
 import com.cesarfraaga.productmanagement.entity.Product;
 import com.cesarfraaga.productmanagement.entity.ShoppingCart;
@@ -85,6 +86,19 @@ public class ShoppingCartService {
     private void validateBeforeSaveOrUpdate(ShoppingCartDTO shoppingCartDTO) {
         if (shoppingCartDTO.getProductsIds() == null || shoppingCartDTO.getProductsIds().isEmpty())
             throw new IllegalArgumentException(SHOPPINGCART_PRODUCT_ID_IS_NULL_OR_EMPTY);
+
+        for (ProductDTO productDTO : shoppingCartDTO.getProductsDTO()) {
+            Product product = productRepository.findById(productDTO.getId())
+                    .orElseThrow(() -> new ResourceNotFoundException("Product not found: " + productDTO.getId()));
+
+            int requestedQuantity = productDTO.getQuantity(); //requested quantity
+            if (product.getQuantity() < requestedQuantity) {
+                throw new IllegalArgumentException("Not enough stock for product id: " + product.getId());
+            }
+
+            product.setQuantity(product.getQuantity() - requestedQuantity);
+            productRepository.save(product);
+        }
     }
 
 }
