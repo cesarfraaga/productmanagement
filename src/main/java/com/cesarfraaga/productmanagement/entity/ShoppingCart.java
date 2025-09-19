@@ -22,7 +22,7 @@ public class ShoppingCart {
             joinColumns = @JoinColumn(name = "shopping_cart_id"), //Chave estrangeira para ShoppingCart
             inverseJoinColumns = @JoinColumn(name = "product_id") //Chave estrangeira para Product
     )
-    private List<Product> products = new ArrayList<>();
+    private List<Product> products = new ArrayList<>(); //add quantity logic
 
     @OneToOne(mappedBy = "shoppingCart")
     private Sale sale;

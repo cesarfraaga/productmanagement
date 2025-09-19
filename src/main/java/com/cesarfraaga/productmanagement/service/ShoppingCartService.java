@@ -26,6 +26,10 @@ public class ShoppingCartService {
     public ShoppingCartDTO createShoppingCart(ShoppingCartDTO shoppingCartDTO) {
         validateBeforeSaveOrUpdate(shoppingCartDTO);
 
+        //implement the product quantity logic
+        //if quantity product is =0 throw new exception (InsufficientQuantityException-runtime) // addedQuantity < quantity throw new .....
+
+
         ShoppingCart shoppingCart = shoppingCartMapper.toEntityShoppingCart(shoppingCartDTO);
 
         List<Long> productsIds = shoppingCartDTO.getProductsIds();
