@@ -18,7 +18,7 @@ import static com.cesarfraaga.productmanagement.util.ExceptionConstants.*;
 @Service
 public class ProductService {
 
-    private final ProductRepository productRepository;
+    private final ProductRepository productRepository; //Implement schedule to have a product stock control
     private final ProductMapper productMapper;
 
     public ProductDTO save(ProductDTO dto) {
