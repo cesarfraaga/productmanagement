@@ -1,6 +1,6 @@
 package com.cesarfraaga.productmanagement.dto;
 
-import com.cesarfraaga.productmanagement.validator.Validatable;
+import com.cesarfraaga.productmanagement.util.validator.Validatable;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 

@@ -10,7 +10,7 @@ import com.cesarfraaga.productmanagement.repository.SaleRepository;
 import com.cesarfraaga.productmanagement.util.ClientMapper;
 import com.cesarfraaga.productmanagement.util.SaleMapper;
 import com.cesarfraaga.productmanagement.validator.SaleValidator;
-import com.cesarfraaga.productmanagement.validator.ValidationError;
+import com.cesarfraaga.productmanagement.util.validator.ValidationError;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 

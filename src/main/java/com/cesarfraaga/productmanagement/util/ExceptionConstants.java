@@ -7,7 +7,7 @@ import lombok.NoArgsConstructor;
 public class ExceptionConstants {
 
     public static final String PERIOD = ".";
-    public static final String CLIENT_ID_NOT_FOUND_MESSAGE = "Client not found with ID ";
+    public static final String CLIENT_ID_NOT_FOUND_MESSAGE_PREFIX = "Client not found with ID ";
     public static final String CLIENT_ID_NULL_MESSAGE = "Client id cannot be null.";
     public static final String CLIENT_NOT_FOUND_MESSAGE = "Client not found.";
     public static final String CLIENTS_NOT_FOUND_MESSAGE = "No clients found.";
@@ -42,4 +42,5 @@ public class ExceptionConstants {
 
     public static final String BASIC_CHARACTER = "^[a-zA-ZÀ-ÿ\\s]+$";
     public static final String ONLY_NUMBER = "^[0-9]+$";
+    public static final String SHOPPINGCART_STOCK_NOT_ENOUGH_PATTERN = "Shopping cart asked for %s units of product \"%s\" (id=%s). Maximum available: %s.";
 }

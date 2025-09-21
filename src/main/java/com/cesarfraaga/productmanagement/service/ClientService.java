@@ -30,12 +30,12 @@ public class ClientService {
 
     public ClientDTO updateClient(final ClientDTO clientDTO) {
         if (clientDTO.getId() == null || !repository.existsById(clientDTO.getId()))
-            throw new ResourceNotFoundException(CLIENT_ID_NOT_FOUND_MESSAGE + clientDTO.getId() + PERIOD);
+            throw new ResourceNotFoundException(CLIENT_ID_NOT_FOUND_MESSAGE_PREFIX + clientDTO.getId() + PERIOD);
 
         validateBeforeSaveOrUpdate(clientDTO);
 
         Client existingClient = repository.findById(clientDTO.getId())
-                .orElseThrow(() -> new ResourceNotFoundException(CLIENT_ID_NOT_FOUND_MESSAGE + clientDTO.getId() + PERIOD));
+                .orElseThrow(() -> new ResourceNotFoundException(CLIENT_ID_NOT_FOUND_MESSAGE_PREFIX + clientDTO.getId() + PERIOD));
         //At some point, i'll need to change the logic. User won't be able to change their cpf, only an administrator can
         existingClient.setName(clientDTO.getName());
         existingClient.setCpf(clientDTO.getCpf());
@@ -54,7 +54,7 @@ public class ClientService {
         }
 
         Client client = repository.findById(id)
-                .orElseThrow(() -> new ResourceNotFoundException(CLIENT_ID_NOT_FOUND_MESSAGE + id + PERIOD));
+                .orElseThrow(() -> new ResourceNotFoundException(CLIENT_ID_NOT_FOUND_MESSAGE_PREFIX + id + PERIOD));
         return clientMapper.clientToDTO(client);
     }
 

@@ -1,6 +1,6 @@
 package com.cesarfraaga.productmanagement.dto;
 
-import com.cesarfraaga.productmanagement.validator.Validatable;
+import com.cesarfraaga.productmanagement.util.validator.Validatable;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import lombok.Data;
 

@@ -9,7 +9,7 @@ import com.cesarfraaga.productmanagement.repository.ProductRepository;
 import com.cesarfraaga.productmanagement.repository.ShoppingCartRepository;
 import com.cesarfraaga.productmanagement.util.ShoppingCartMapper;
 import com.cesarfraaga.productmanagement.validator.ShoppingCartValidator;
-import com.cesarfraaga.productmanagement.validator.ValidationError;
+import com.cesarfraaga.productmanagement.util.validator.ValidationError;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 

@@ -1,7 +1,6 @@
 package com.cesarfraaga.productmanagement.dto;
 
-import com.cesarfraaga.productmanagement.validator.Validatable;
-import jakarta.persistence.Column;
+import com.cesarfraaga.productmanagement.util.validator.Validatable;
 import lombok.Data;
 
 import java.math.BigDecimal;
