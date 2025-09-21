@@ -15,8 +15,8 @@ import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.stream.Collectors;
 
+import static com.cesarfraaga.productmanagement.util.validator.ValidationHelper.throwIllegalArgumentExceptionInCaseOfErrors;
 import static com.cesarfraaga.productmanagement.util.ExceptionConstants.*;
 
 @RequiredArgsConstructor
@@ -31,11 +31,7 @@ public class ShoppingCartService {
     public ShoppingCartDTO createShoppingCart(ShoppingCartDTO shoppingCartDTO) {
         List<ValidationError> validationErrors = validator.validate(shoppingCartDTO);
 
-        if (!validationErrors.isEmpty()) {
-            String messages = validationErrors.stream().map(ValidationError::getMessage).collect(Collectors.joining("\n"));
-            String pattern = "Could not validate shopping cart due to the following errors: \n%s";
-            throw new IllegalArgumentException(String.format(pattern, messages));
-        }
+        throwIllegalArgumentExceptionInCaseOfErrors(validationErrors,"Could not validate shopping cart due to the following errors: \n%s");
 
         return saveShoppingCart(shoppingCartDTO);
     }

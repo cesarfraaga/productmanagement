@@ -41,5 +41,4 @@ public class ShoppingCartValidator implements Validator<ShoppingCartDTO> {
         }
 
     }
-
 }

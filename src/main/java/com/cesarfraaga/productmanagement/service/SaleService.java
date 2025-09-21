@@ -16,8 +16,8 @@ import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.stream.Collectors;
 
+import static com.cesarfraaga.productmanagement.util.validator.ValidationHelper.throwIllegalArgumentExceptionInCaseOfErrors;
 import static com.cesarfraaga.productmanagement.util.ExceptionConstants.*;
 
 @RequiredArgsConstructor
@@ -38,11 +38,7 @@ public class SaleService {
     public SaleDTO createSale(SaleDTO saleDTO) {
         List<ValidationError> validationErrors = validator.validate(saleDTO);
 
-        if (!validationErrors.isEmpty()) {
-            String messages = validationErrors.stream().map(ValidationError::getMessage).collect(Collectors.joining("\n"));
-            String pattern = "Could not validate sale due to the following errors: \n%s";
-            throw new IllegalArgumentException(String.format(pattern, messages));
-        }
+        throwIllegalArgumentExceptionInCaseOfErrors(validationErrors,"Could not validate sale due to the following errors: \n%s");
 
         ClientDTO clientDTO = clientMapper.clientToDTO(clientRepository.findById(saleDTO.getClientDTO().getId()).get());
         saleDTO.setClientDTO(clientDTO);
