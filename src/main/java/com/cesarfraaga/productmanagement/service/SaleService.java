@@ -3,19 +3,20 @@ package com.cesarfraaga.productmanagement.service;
 import com.cesarfraaga.productmanagement.dto.ClientDTO;
 import com.cesarfraaga.productmanagement.dto.SaleDTO;
 import com.cesarfraaga.productmanagement.dto.ShoppingCartDTO;
-import com.cesarfraaga.productmanagement.entity.Client;
 import com.cesarfraaga.productmanagement.entity.Sale;
 import com.cesarfraaga.productmanagement.exception.ResourceNotFoundException;
 import com.cesarfraaga.productmanagement.repository.ClientRepository;
 import com.cesarfraaga.productmanagement.repository.SaleRepository;
 import com.cesarfraaga.productmanagement.util.ClientMapper;
 import com.cesarfraaga.productmanagement.util.SaleMapper;
+import com.cesarfraaga.productmanagement.validator.SaleValidator;
+import com.cesarfraaga.productmanagement.validator.ValidationError;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Objects;
+import java.util.stream.Collectors;
 
 import static com.cesarfraaga.productmanagement.util.ExceptionConstants.*;
 
@@ -31,27 +32,27 @@ public class SaleService {
 
     private final ShoppingCartService shoppingCartService;
 
+    private final SaleValidator validator;
+
     //this logic needs to be further encapsulated
     public SaleDTO createSale(SaleDTO saleDTO) {
-        if (saleDTO.getClientDTO().getId() == null)
-            throw new IllegalArgumentException(CLIENT_ID_NULL_MESSAGE);
+        List<ValidationError> validationErrors = validator.validate(saleDTO);
 
-        if (Objects.isNull(saleDTO.getShoppingCartDTO()))
-            throw new IllegalArgumentException(SALE_SHOPPINGCART_NOT_NULL_OR_EMPTY_MESSAGE);
+        if (!validationErrors.isEmpty()) {
+            String messages = validationErrors.stream().map(ValidationError::getMessage).collect(Collectors.joining("\n"));
+            String pattern = "Could not validate sale due to the following errors: \n%s";
+            throw new IllegalArgumentException(String.format(pattern, messages));
+        }
 
-        Client client = clientRepository.findById(saleDTO.getClientDTO().getId())
-                .orElseThrow(() -> new ResourceNotFoundException(CLIENT_ID_NOT_FOUND_MESSAGE + saleDTO.getClientDTO().getId() + PERIOD));
-
-        ClientDTO clientDTO = clientMapper.clientToDTO(client);
+        ClientDTO clientDTO = clientMapper.clientToDTO(clientRepository.findById(saleDTO.getClientDTO().getId()).get());
         saleDTO.setClientDTO(clientDTO);
 
         ShoppingCartDTO shoppingCartDTO = shoppingCartService.createShoppingCart(saleDTO.getShoppingCartDTO());
         saleDTO.setShoppingCartDTO(shoppingCartDTO);
 
-        Sale sale = saleMapper.toEntitySale(saleDTO);
-        sale = saleRepository.save(sale);
-        return saleMapper.toDTOSale(sale);
-        //error: not returning correct data via postman
+        Sale savedSale = saleRepository.save(saleMapper.toEntitySale(saleDTO));
+
+        return saleMapper.toDTOSale(savedSale);
     }
 
     public SaleDTO update(SaleDTO saleDTO) {

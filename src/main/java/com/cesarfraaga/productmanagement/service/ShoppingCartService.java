@@ -8,11 +8,14 @@ import com.cesarfraaga.productmanagement.exception.ResourceNotFoundException;
 import com.cesarfraaga.productmanagement.repository.ProductRepository;
 import com.cesarfraaga.productmanagement.repository.ShoppingCartRepository;
 import com.cesarfraaga.productmanagement.util.ShoppingCartMapper;
+import com.cesarfraaga.productmanagement.validator.ShoppingCartValidator;
+import com.cesarfraaga.productmanagement.validator.ValidationError;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import static com.cesarfraaga.productmanagement.util.ExceptionConstants.*;
 
@@ -23,14 +26,27 @@ public class ShoppingCartService {
     private final ShoppingCartRepository shoppingCartRepository;
     private final ShoppingCartMapper shoppingCartMapper;
     private final ProductRepository productRepository;
+    private final ShoppingCartValidator validator;
 
     public ShoppingCartDTO createShoppingCart(ShoppingCartDTO shoppingCartDTO) {
+        List<ValidationError> validationErrors = validator.validate(shoppingCartDTO);
+
+        if (!validationErrors.isEmpty()) {
+            String messages = validationErrors.stream().map(ValidationError::getMessage).collect(Collectors.joining("\n"));
+            String pattern = "Could not validate shopping cart due to the following errors: \n%s";
+            throw new IllegalArgumentException(String.format(pattern, messages));
+        }
+
+        return saveShoppingCart(shoppingCartDTO);
+    }
+
+    public ShoppingCartDTO createShoppingCart2(ShoppingCartDTO shoppingCartDTO) {
         validateBeforeSaveOrUpdate(shoppingCartDTO);
 
-        //implement the product quantity logic
-        //if quantity product is =0 throw new exception (InsufficientQuantityException-runtime) // addedQuantity < quantity throw new .....
+        return saveShoppingCart(shoppingCartDTO);
+    }
 
-
+    private ShoppingCartDTO saveShoppingCart(ShoppingCartDTO shoppingCartDTO) {
         ShoppingCart shoppingCart = shoppingCartMapper.toEntityShoppingCart(shoppingCartDTO);
 
         List<Long> productsIds = shoppingCartDTO.getProductsIds();
@@ -48,9 +64,6 @@ public class ShoppingCartService {
 
         validateBeforeSaveOrUpdate(shoppingCartDTO);
 
-        /*if (shoppingCartDTO.getProductsIds().isEmpty())
-            throw new ResourceNotFoundException("Shopping Cart is empty.");
-         */
         ShoppingCart shoppingCart = shoppingCartMapper.toEntityShoppingCart(shoppingCartDTO);
         shoppingCart = shoppingCartRepository.save(shoppingCart);
         return shoppingCartMapper.toDTOShoppingCart(shoppingCart);
@@ -84,6 +97,10 @@ public class ShoppingCartService {
     }
 
     private void validateBeforeSaveOrUpdate(ShoppingCartDTO shoppingCartDTO) {
+
+    }
+
+    private void validateBeforeSaveOrUpdateAndUpdateProductQuantity(ShoppingCartDTO shoppingCartDTO) {
         if (shoppingCartDTO.getProductsIds() == null || shoppingCartDTO.getProductsIds().isEmpty())
             throw new IllegalArgumentException(SHOPPINGCART_PRODUCT_ID_IS_NULL_OR_EMPTY);
 
@@ -91,7 +108,7 @@ public class ShoppingCartService {
             Product product = productRepository.findById(productDTO.getId())
                     .orElseThrow(() -> new ResourceNotFoundException("Product not found: " + productDTO.getId()));
 
-            int requestedQuantity = productDTO.getQuantity(); //requested quantity
+            int requestedQuantity = productDTO.getQuantity();
             if (product.getQuantity() < requestedQuantity) {
                 throw new IllegalArgumentException("Not enough stock for product id: " + product.getId());
             }
