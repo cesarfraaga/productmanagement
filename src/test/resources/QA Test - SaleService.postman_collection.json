@@ -1,0 +1,166 @@
+{
+	"info": {
+		"_postman_id": "c26cca52-0b75-447a-a5d2-1e07b7d891e1",
+		"name": "QA Test - SaleService",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "38485069"
+	},
+	"item": [
+		{
+			"name": "Happy Path Scenario - Success Sale for two products",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"    pm.test(\"Status code is 201\", function () {\r",
+							"        pm.response.to.have.status(201);\r",
+							"    });\r",
+							"\r",
+							"    pm.test(\"Response body contains 'success'\", function () {\r",
+							"        pm.expect(pm.response.text()).to.include(\"Kaleb da Silva Senna\");\r",
+							"        pm.expect(pm.response.text()).to.include(\"Headset ótimo para jogos Imersivos\");\r",
+							"        pm.expect(pm.response.text()).to.include(\"Headset Jennifer\");\r",
+							"        pm.expect(pm.response.text()).to.include(\"Headset Kaleb Senna\");\r",
+							"    });"
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n  \"clientDTO\": {\r\n    \"id\": 4\r\n  },\r\n  \"shoppingCartDTO\": {\r\n    \"productsDTO\": [\r\n      {\r\n        \"id\": 3,\r\n        \"quantity\" : 1\r\n      },\r\n      {\r\n        \"id\": 4,\r\n        \"quantity\" : 1\r\n      }\r\n    ]\r\n  }\r\n}\r\n",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "localhost:8080/sale/save",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"sale",
+						"save"
+					]
+				},
+				"description": "Error Scenario:\r\n- There is not enough items on stock for one of the products"
+			},
+			"response": []
+		},
+		{
+			"name": "Error Scenario - Not enough items for only one product",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"    pm.test(\"Status code is 500\", function () {\r",
+							"        pm.response.to.have.status(500);\r",
+							"    });\r",
+							"\r",
+							"    pm.test(\"Response body contains 'errors'\", function () {\r",
+							"        pm.expect(pm.response.text()).to.include(\"Could not validate shopping cart due to the following errors:\");\r",
+							"        pm.expect(pm.response.text()).to.include(\"Shopping cart asked for 1 units of product\");\r",
+							"        pm.expect(pm.response.text()).to.include(\"Headset Cesar\");\r",
+							"        pm.expect(pm.response.text()).to.include(\"Maximum available: 0.\");\r",
+							"        pm.expect(pm.response.text()).to.include(\"(id=1).\");\r",
+							"    });"
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n  \"clientDTO\": {\r\n    \"id\": 4\r\n  },\r\n  \"shoppingCartDTO\": {\r\n    \"productsDTO\": [\r\n      {\r\n        \"id\": 1,\r\n        \"quantity\" : 1\r\n      },\r\n      {\r\n        \"id\": 4,\r\n        \"quantity\" : 1\r\n      }\r\n    ]\r\n  }\r\n}\r\n",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "localhost:8080/sale/save",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"sale",
+						"save"
+					]
+				},
+				"description": "Error Scenario:\r\n- There is not enough items on stock for one of the products"
+			},
+			"response": []
+		},
+		{
+			"name": "Error Scenario - Not enough items for two products",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"    pm.test(\"Status code is 500\", function () {\r",
+							"        pm.response.to.have.status(500);\r",
+							"    });\r",
+							"\r",
+							"    pm.test(\"Response body contains 'error'\", function () {\r",
+							"        pm.expect(pm.response.text()).to.include(\"Could not validate shopping cart due to the following errors:\");\r",
+							"        pm.expect(pm.response.text()).to.include(\"Shopping cart asked for 1 units of product\");\r",
+							"        pm.expect(pm.response.text()).to.include(\"Headset Cesar\");\r",
+							"        pm.expect(pm.response.text()).to.include(\"(id=1).\");\r",
+							"        pm.expect(pm.response.text()).to.include(\"Maximum available: 0.\");\r",
+							"        pm.expect(pm.response.text()).to.include(\"Shopping cart asked for 50 units of product\");\r",
+							"        pm.expect(pm.response.text()).to.include(\"Headset Jennifer\");\r",
+							"        pm.expect(pm.response.text()).to.include(\"(id=4).\");\r",
+							"        pm.expect(pm.response.text()).to.include(\"Maximum available: 23.\");\r",
+							"    });"
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n  \"clientDTO\": {\r\n    \"id\": 4\r\n  },\r\n  \"shoppingCartDTO\": {\r\n    \"productsDTO\": [\r\n      {\r\n        \"id\": 1,\r\n        \"quantity\" : 1\r\n      },\r\n      {\r\n        \"id\": 4,\r\n        \"quantity\" : 50\r\n      }\r\n    ]\r\n  }\r\n}\r\n",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "localhost:8080/sale/save",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"sale",
+						"save"
+					]
+				},
+				"description": "Error Scenario:\r\n- There is not enough items on stock for one of the products"
+			},
+			"response": []
+		}
+	]
+}
