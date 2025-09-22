@@ -10,15 +10,14 @@ import com.cesarfraaga.productmanagement.repository.SaleRepository;
 import com.cesarfraaga.productmanagement.util.ClientMapper;
 import com.cesarfraaga.productmanagement.util.SaleMapper;
 import com.cesarfraaga.productmanagement.validator.SaleValidator;
-import com.cesarfraaga.productmanagement.util.validator.ValidationError;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
 
-import static com.cesarfraaga.productmanagement.util.validator.ValidationHelper.throwIllegalArgumentExceptionInCaseOfErrors;
 import static com.cesarfraaga.productmanagement.util.ExceptionConstants.*;
+import static com.cesarfraaga.productmanagement.util.validator.ValidationHelper.throwIllegalArgumentExceptionInCaseOfErrors;
 
 @RequiredArgsConstructor
 @Service
@@ -36,9 +35,8 @@ public class SaleService {
 
     //this logic needs to be further encapsulated
     public SaleDTO createSale(SaleDTO saleDTO) {
-        List<ValidationError> validationErrors = validator.validate(saleDTO);
 
-        throwIllegalArgumentExceptionInCaseOfErrors(validationErrors,"Could not validate sale due to the following errors: \n%s");
+        throwIllegalArgumentExceptionInCaseOfErrors(validator, saleDTO);
 
         ClientDTO clientDTO = clientMapper.clientToDTO(clientRepository.findById(saleDTO.getClientDTO().getId()).get());
         saleDTO.setClientDTO(clientDTO);

@@ -8,15 +8,14 @@ import com.cesarfraaga.productmanagement.exception.ResourceNotFoundException;
 import com.cesarfraaga.productmanagement.repository.ProductRepository;
 import com.cesarfraaga.productmanagement.repository.ShoppingCartRepository;
 import com.cesarfraaga.productmanagement.util.ShoppingCartMapper;
+import com.cesarfraaga.productmanagement.util.validator.ValidationHelper;
 import com.cesarfraaga.productmanagement.validator.ShoppingCartValidator;
-import com.cesarfraaga.productmanagement.util.validator.ValidationError;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
 
-import static com.cesarfraaga.productmanagement.util.validator.ValidationHelper.throwIllegalArgumentExceptionInCaseOfErrors;
 import static com.cesarfraaga.productmanagement.util.ExceptionConstants.*;
 
 @RequiredArgsConstructor
@@ -29,10 +28,7 @@ public class ShoppingCartService {
     private final ShoppingCartValidator validator;
 
     public ShoppingCartDTO createShoppingCart(ShoppingCartDTO shoppingCartDTO) {
-        List<ValidationError> validationErrors = validator.validate(shoppingCartDTO);
-
-        throwIllegalArgumentExceptionInCaseOfErrors(validationErrors,"Could not validate shopping cart due to the following errors: \n%s");
-
+        ValidationHelper.throwIllegalArgumentExceptionInCaseOfErrors(validator, shoppingCartDTO);
         return saveShoppingCart(shoppingCartDTO);
     }
 

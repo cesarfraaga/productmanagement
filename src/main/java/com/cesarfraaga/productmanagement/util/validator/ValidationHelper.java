@@ -11,4 +11,10 @@ public class ValidationHelper {
             throw new IllegalArgumentException(String.format(pattern, messages));
         }
     }
+
+    public static void throwIllegalArgumentExceptionInCaseOfErrors(Validator validator, Validatable validatable) {
+        List<ValidationError> validationErrors = validator.validate(validatable);
+        String entityName = validatable.getClass().getSimpleName().replace("DTO", "");
+        throwIllegalArgumentExceptionInCaseOfErrors(validationErrors, "Could not validate " + entityName + " due to the following errors: \n%s");
+    }
 }
