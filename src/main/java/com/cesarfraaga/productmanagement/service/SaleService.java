@@ -17,7 +17,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import static com.cesarfraaga.productmanagement.util.ExceptionConstants.*;
-import static com.cesarfraaga.productmanagement.util.validator.ValidationHelper.throwIllegalArgumentExceptionInCaseOfErrors;
+import com.cesarfraaga.productmanagement.util.validator.ValidationHelper;
 
 @RequiredArgsConstructor
 @Service
@@ -36,7 +36,7 @@ public class SaleService {
     //this logic needs to be further encapsulated
     public SaleDTO createSale(SaleDTO saleDTO) {
 
-        throwIllegalArgumentExceptionInCaseOfErrors(validator, saleDTO);
+        ValidationHelper.throwIllegalArgumentExceptionInCaseOfErrors(validator, saleDTO);
 
         ClientDTO clientDTO = clientMapper.clientToDTO(clientRepository.findById(saleDTO.getClientDTO().getId()).get());
         saleDTO.setClientDTO(clientDTO);
