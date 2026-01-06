@@ -31,8 +31,6 @@ public class SaleService {
     //this logic needs to be further encapsulated
     public SaleDTO createSale(SaleDTO saleDTO) {
 
-        //TODO validationhelper here
-
         ClientDTO clientDTO = clientMapper.clientToDTO(clientRepository.findById(saleDTO.getClientDTO().getId()).get());
         saleDTO.setClientDTO(clientDTO);
 
