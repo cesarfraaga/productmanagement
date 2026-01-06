@@ -1,6 +1,5 @@
 package com.cesarfraaga.productmanagement.dto;
 
-import com.cesarfraaga.productmanagement.util.validator.Validatable;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Getter;
 import lombok.Setter;
@@ -9,7 +8,7 @@ import java.util.List;
 
 @Getter
 @Setter
-public class ShoppingCartDTO  implements Validatable {
+public class ShoppingCartDTO {  //TODO implements Validatable here
     private Long id;
     private List<ProductDTO> productsDTO;
 

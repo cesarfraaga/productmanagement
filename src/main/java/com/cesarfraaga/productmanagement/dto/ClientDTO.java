@@ -1,6 +1,5 @@
 package com.cesarfraaga.productmanagement.dto;
 
-import com.cesarfraaga.productmanagement.util.validator.Validatable;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 
@@ -8,7 +7,7 @@ import java.util.List;
 
 @AllArgsConstructor
 @Data
-public class ClientDTO implements Validatable {
+public class ClientDTO {         //TODO implements Validatable here
     private Long id;
     private String name;
     private String cpf;

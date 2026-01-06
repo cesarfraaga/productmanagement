@@ -8,8 +8,6 @@ import com.cesarfraaga.productmanagement.exception.ResourceNotFoundException;
 import com.cesarfraaga.productmanagement.repository.ProductRepository;
 import com.cesarfraaga.productmanagement.repository.ShoppingCartRepository;
 import com.cesarfraaga.productmanagement.util.ShoppingCartMapper;
-import com.cesarfraaga.productmanagement.util.validator.ValidationHelper;
-import com.cesarfraaga.productmanagement.validator.ShoppingCartValidator;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -25,14 +23,8 @@ public class ShoppingCartService {
     private final ShoppingCartRepository shoppingCartRepository;
     private final ShoppingCartMapper shoppingCartMapper;
     private final ProductRepository productRepository;
-    private final ShoppingCartValidator validator;
 
     public ShoppingCartDTO createShoppingCart(ShoppingCartDTO shoppingCartDTO) {
-        ValidationHelper.throwIllegalArgumentExceptionInCaseOfErrors(validator, shoppingCartDTO);
-        return saveShoppingCart(shoppingCartDTO);
-    }
-
-    public ShoppingCartDTO createShoppingCart2(ShoppingCartDTO shoppingCartDTO) {
         validateBeforeSaveOrUpdate(shoppingCartDTO);
 
         return saveShoppingCart(shoppingCartDTO);

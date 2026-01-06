@@ -9,7 +9,6 @@ import com.cesarfraaga.productmanagement.repository.ClientRepository;
 import com.cesarfraaga.productmanagement.repository.SaleRepository;
 import com.cesarfraaga.productmanagement.util.ClientMapper;
 import com.cesarfraaga.productmanagement.util.SaleMapper;
-import com.cesarfraaga.productmanagement.validator.SaleValidator;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -17,8 +16,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 import static com.cesarfraaga.productmanagement.util.ExceptionConstants.*;
-import com.cesarfraaga.productmanagement.util.validator.ValidationHelper;
-
 @RequiredArgsConstructor
 @Service
 public class SaleService {
@@ -31,12 +28,10 @@ public class SaleService {
 
     private final ShoppingCartService shoppingCartService;
 
-    private final SaleValidator validator;
-
     //this logic needs to be further encapsulated
     public SaleDTO createSale(SaleDTO saleDTO) {
 
-        ValidationHelper.throwIllegalArgumentExceptionInCaseOfErrors(validator, saleDTO);
+        //TODO validationhelper here
 
         ClientDTO clientDTO = clientMapper.clientToDTO(clientRepository.findById(saleDTO.getClientDTO().getId()).get());
         saleDTO.setClientDTO(clientDTO);
