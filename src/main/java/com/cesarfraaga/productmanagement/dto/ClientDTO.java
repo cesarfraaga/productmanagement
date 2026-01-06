@@ -7,7 +7,7 @@ import java.util.List;
 
 @AllArgsConstructor
 @Data
-public class ClientDTO {         //TODO implements Validatable here
+public class ClientDTO {
     private Long id;
     private String name;
     private String cpf;

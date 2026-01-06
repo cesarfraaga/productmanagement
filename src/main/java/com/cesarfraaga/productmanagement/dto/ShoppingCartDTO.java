@@ -8,7 +8,7 @@ import java.util.List;
 
 @Getter
 @Setter
-public class ShoppingCartDTO {  //TODO implements Validatable here
+public class ShoppingCartDTO {
     private Long id;
     private List<ProductDTO> productsDTO;
 
